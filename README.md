@@ -49,6 +49,29 @@ pip install -r requirements.txt
 - **The agent may not edit the spec to pass a test.** A failing test is either a bug in the
   SQL or a finding about the spec, and a human decides which.
 
+## Why not just write schema.yml?
+
+For a single model, you could. The spec and the generated YAML are close. The spec layer
+pays off when many models, many teams and coding agents are involved:
+
+- **The agent doesn't grade its own homework.** If an agent writes both the SQL and the
+  schema.yml, it can loosen a test to get a green build. Here a human owns the spec, the
+  tests are generated from it, and the agent only writes SQL.
+- **Conventions live in one place.** schema.yml accepts anything; `specgen` refuses a spec
+  that breaks the naming, type, key or documentation rules. Change a rule once (say, every
+  grain becomes a primary key constraint) and regenerate every model, instead of editing
+  each YAML file.
+- **Intent, not syntax.** `grain: [customer_id, order_month]` becomes not_null checks, a
+  combined-uniqueness test and constraints. Business rules ("returned orders don't count")
+  have no real home in schema.yml; in the spec they are what the agent implements and what
+  the reviewer checks.
+- **One source, many outputs.** The same spec can also feed catalog keys, docs or a data
+  contract.
+
+**The lighter alternative:** make "humans own schema.yml, agents only write SQL" a rule,
+enforce it with `CODEOWNERS` and a linter such as dbt-project-evaluator, and skip the
+separate spec format. For a small team that is often enough.
+
 ## Try breaking it
 
 Rename `value_tier` to `tier` in `models/marts/dim_customer_value.sql` and run
