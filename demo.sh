@@ -13,7 +13,7 @@ step "2. Generate contracts and tests from the specs"
 python tools/specgen.py generate
 
 step "3. Build and verify against real data"
-dbt build --quiet --select +dim_customer_value
+dbt build --quiet
 echo "All models built and all tests passed."
 
 step "4. Result: dim_customer_value by tier"

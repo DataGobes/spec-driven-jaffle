@@ -4,8 +4,14 @@
 The spec (specs/<model>.yml) is the source of truth. This tool:
   validate  check every spec against specs/_conventions.yml
   generate  write models/<layer>/_<model>.yml: contract, constraints, tests, docs
-  status    show which specs have a contract and an implementation
+  status    show each spec's lifecycle, contract and implementation
   task      print the full task for a coding agent to implement one model
+  draft     profile a relation and write a draft spec:  draft <relation> --as <model>
+  promote   move a draft spec to enforced once it is complete
+
+Lifecycle: a `draft` spec generates every test as a warning and does not
+enforce the contract, so a new model can meet real data before it is strict.
+An `enforced` spec turns everything into hard failures.
 
 The SQL itself is written by a coding agent from the spec
 (see prompts/implement_from_spec.md). The generated contract and tests are
@@ -13,6 +19,8 @@ what prove the agent got it right.
 """
 from __future__ import annotations
 
+import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -50,23 +58,38 @@ def load_specs(only: str | None = None) -> list[tuple[Path, dict]]:
 
 
 # ------------------------------------------------------------- validation
-def validate(spec: dict, conv: dict) -> list[str]:
-    """Return a list of violations; empty means the spec is valid."""
+def status_of(spec: dict) -> str:
+    return spec.get("status", "enforced")
+
+
+def missing(text) -> bool:
+    """Empty, or still a TODO left by `specgen draft`."""
+    return not text or str(text).strip().upper().startswith("TODO")
+
+
+def validate(spec: dict, conv: dict, as_status: str | None = None) -> tuple[list[str], list[str]]:
+    """Return (errors, warnings). Documentation gaps are warnings for a draft."""
     errs: list[str] = []
+    docs_gaps: list[str] = []
     name = spec.get("model", "<missing>")
+    status = as_status or status_of(spec)
+    if status not in conv["lifecycle"]["statuses"]:
+        errs.append(f"unknown status '{status}', use one of {conv['lifecycle']['statuses']}")
     layer = conv["layers"].get(spec.get("layer"))
     if layer is None:
         errs.append(f"unknown layer '{spec.get('layer')}'")
-        return errs
+        return errs, []
 
     if not any(name.startswith(p) for p in layer["allowed_prefixes"]):
         errs.append(f"name must start with one of {layer['allowed_prefixes']}")
 
     docs = conv["documentation"]
-    if docs["owner_required"] and not spec.get("owner"):
-        errs.append("owner is required")
-    if docs["model_description_required"] and not spec.get("description"):
-        errs.append("model description is required")
+    if docs["owner_required"] and missing(spec.get("owner")):
+        docs_gaps.append("owner is required")
+    if docs["model_description_required"] and missing(spec.get("description")):
+        docs_gaps.append("model description is required")
+    if any(missing(r) for r in spec.get("rules") or []):
+        docs_gaps.append("rules still contain a TODO")
 
     cols = spec.get("columns") or []
     col_names = [c.get("name") for c in cols]
@@ -85,8 +108,8 @@ def validate(spec: dict, conv: dict) -> list[str]:
         cname = c.get("name")
         if c.get("type") not in allowed_types:
             errs.append(f"{cname}: type '{c.get('type')}' not in {allowed_types}")
-        if docs["column_description_required"] and not c.get("description"):
-            errs.append(f"{cname}: description is required")
+        if docs["column_description_required"] and missing(c.get("description")):
+            docs_gaps.append(f"{cname}: description is required")
         if "accepted_values" in c and c.get("type") != "varchar":
             errs.append(f"{cname}: accepted_values only allowed on varchar")
         ref = c.get("references")
@@ -95,7 +118,9 @@ def validate(spec: dict, conv: dict) -> list[str]:
 
     if not spec.get("depends_on"):
         errs.append("depends_on is required (lineage must be declared)")
-    return errs
+    if status == "draft":
+        return errs, docs_gaps
+    return errs + docs_gaps, []
 
 
 # ------------------------------------------------------------- generation
@@ -104,32 +129,43 @@ def build_contract(spec: dict, conv: dict) -> dict:
     layer = conv["layers"][spec["layer"]]
     grain = spec["grain"]
     pk_tests = conv["keys"]["primary_key_tests"]
+    draft = status_of(spec) == "draft"
+
+    def t(test):
+        """A draft reports a failing test as a warning instead of failing the build."""
+        if not draft:
+            return test
+        if isinstance(test, str):
+            return {test: {"config": {"severity": "warn"}}}
+        (name, body), = test.items()
+        return {name: {**body, "config": {"severity": "warn"}}}
 
     columns = []
     for c in spec["columns"]:
         col: dict = {
             "name": c["name"],
-            "description": c["description"],
+            "description": str(c["description"]),
             "data_type": c["type"],
         }
         tests: list = []
         constraints: list = []
 
         if c["name"] in grain:
-            constraints.append({"type": "not_null"})
+            if not draft:
+                constraints.append({"type": "not_null"})
             if "not_null" in pk_tests:
-                tests.append("not_null")
+                tests.append(t("not_null"))
             if len(grain) == 1 and "unique" in pk_tests:
-                tests.append("unique")
+                tests.append(t("unique"))
         if "accepted_values" in c:
-            tests.append({"accepted_values": {
-                "arguments": {"values": c["accepted_values"]}}})
+            tests.append(t({"accepted_values": {
+                "arguments": {"values": c["accepted_values"]}}}))
         if c.get("references"):
             ref_model, ref_col = c["references"].split(".")
-            tests.append({"relationships": {"arguments": {
-                "to": f"ref('{ref_model}')", "field": ref_col}}})
+            tests.append(t({"relationships": {"arguments": {
+                "to": f"ref('{ref_model}')", "field": ref_col}}}))
         for expr in c.get("checks", []):
-            tests.append({"spec_check": {"arguments": {"expression": expr}}})
+            tests.append(t({"spec_check": {"arguments": {"expression": expr}}}))
 
         if constraints:
             col["constraints"] = constraints
@@ -139,20 +175,21 @@ def build_contract(spec: dict, conv: dict) -> dict:
 
     model_tests: list = []
     if len(grain) > 1:
-        model_tests.append({"spec_unique_combination": {
-            "arguments": {"columns": grain}}})
+        model_tests.append(t({"spec_unique_combination": {
+            "arguments": {"columns": grain}}}))
     exp = spec.get("expectations") or {}
     if exp.get("row_count_equals"):
-        model_tests.append({"spec_rowcount_equals": {"arguments": {
-            "compare_model": f"ref('{exp['row_count_equals']}')"}}})
+        model_tests.append(t({"spec_rowcount_equals": {"arguments": {
+            "compare_model": f"ref('{exp['row_count_equals']}')"}}}))
 
     model: dict = {
         "name": spec["model"],
-        "description": " ".join(spec["description"].split()),
+        "description": " ".join(str(spec["description"]).split()),
         "config": {
             "materialized": layer["materialized"],
-            "contract": {"enforced": layer["contract_enforced"]},
+            "contract": {"enforced": layer["contract_enforced"] and not draft},
             "meta": {
+                "status": status_of(spec),
                 "owner": spec["owner"],
                 "grain": grain,
                 "spec": f"specs/{spec['model']}.yml",
@@ -196,16 +233,19 @@ def cmd_validate(only: str | None) -> int:
     conv = load_conventions()
     failed = 0
     for path, spec in load_specs(only):
-        errs = validate(spec, conv)
+        errs, warns = validate(spec, conv)
         if errs:
             failed += 1
             print(f"{RED}✗{RESET} {spec.get('model')}")
             for e in errs:
                 print(f"    {RED}-{RESET} {e}")
         else:
-            print(f"{GREEN}✓{RESET} {spec['model']}  "
+            tag = f"  {YELLOW}draft{RESET}" if status_of(spec) == "draft" else ""
+            print(f"{GREEN}✓{RESET} {spec['model']}{tag}  "
                   f"{DIM}grain={spec['grain']}  "
                   f"{len(spec['columns'])} columns{RESET}")
+            for w in warns:
+                print(f"    {YELLOW}~{RESET} {w}")
     return 1 if failed else 0
 
 
@@ -218,7 +258,11 @@ def cmd_generate(only: str | None) -> int:
     for _, spec in load_specs(only):
         path, n = write_contract(spec, conv)
         rel = path.relative_to(ROOT)
-        print(f"{GREEN}→{RESET} {rel}  {DIM}contract enforced, {n} tests{RESET}")
+        if status_of(spec) == "draft":
+            print(f"{GREEN}→{RESET} {rel}  {YELLOW}draft:{RESET} "
+                  f"{DIM}contract not enforced, {n} tests as warnings{RESET}")
+        else:
+            print(f"{GREEN}→{RESET} {rel}  {DIM}contract enforced, {n} tests{RESET}")
         if not sql_path(spec, conv).exists():
             print(f"  {YELLOW}! implementation missing:{RESET} "
                   f"{sql_path(spec, conv).relative_to(ROOT)}  "
@@ -228,12 +272,14 @@ def cmd_generate(only: str | None) -> int:
 
 def cmd_status(only: str | None) -> int:
     conv = load_conventions()
-    print(f"{BOLD}{'model':34} {'contract':10} {'implementation'}{RESET}")
+    print(f"{BOLD}{'model':32} {'status':10} {'contract':10} {'implementation'}{RESET}")
     for _, spec in load_specs(only):
         has_c = contract_path(spec, conv).exists()
         has_s = sql_path(spec, conv).exists()
         mark = lambda ok: f"{GREEN}yes{RESET}       " if ok else f"{YELLOW}missing{RESET}   "
-        print(f"{spec['model']:34} {mark(has_c)}{mark(has_s)}")
+        st = status_of(spec)
+        st_txt = f"{YELLOW}{st:10}{RESET}" if st == "draft" else f"{st:10}"
+        print(f"{spec['model']:32} {st_txt} {mark(has_c)}{mark(has_s)}")
     return 0
 
 
@@ -255,19 +301,93 @@ def cmd_task(only: str | None) -> int:
     return 0
 
 
+def cmd_draft(relation: str, model: str) -> int:
+    """Profile a relation and write specs/<model>.yml as a draft for review."""
+    import profiler
+    conv = load_conventions()
+    target = SPECS / f"{model}.yml"
+    if target.exists():
+        raise SpecError(f"{target.relative_to(ROOT)} already exists; drafts never overwrite a spec")
+    layer = next((name for name, l in conv["layers"].items()
+                  if any(model.startswith(p) for p in l["allowed_prefixes"])), None)
+    if layer is None:
+        raise SpecError(f"'{model}' matches no layer prefix in _conventions.yml")
+    try:
+        con = profiler.connect(ROOT / "jaffle.duckdb")
+        prof = profiler.profile(con, relation)
+    except (FileNotFoundError, ValueError) as e:
+        raise SpecError(str(e))
+    target.write_text(profiler.draft_yaml(prof, model, layer))
+    print(f"{GREEN}→{RESET} {target.relative_to(ROOT)}  {YELLOW}draft{RESET}  "
+          f"{DIM}{len(prof['columns'])} columns profiled on {prof['rows']} rows{RESET}")
+    print(f"  {DIM}review it, replace the TODOs, then: specgen.py promote {model}{RESET}")
+    return 0
+
+
+def open_test_results(model: str) -> list[str]:
+    """Tests on this model that did not pass in the last dbt run.
+
+    A draft is only promoted once it has met real data without surprises, so promote
+    reads dbt's own run artifacts instead of trusting anyone's word for it.
+    """
+    import json
+    target = ROOT / "target"
+    try:
+        results = json.loads((target / "run_results.json").read_text())["results"]
+        nodes = json.loads((target / "manifest.json").read_text())["nodes"]
+    except FileNotFoundError:
+        return [f"no dbt results found: run `dbt build --select {model}` first"]
+    model_id = next((k for k, n in nodes.items()
+                     if n.get("resource_type") == "model" and n.get("name") == model), None)
+    tests = [r for r in results if nodes.get(r["unique_id"], {}).get("attached_node") == model_id]
+    if not tests:
+        return [f"{model} was not tested in the last dbt run: run `dbt build --select {model}`"]
+    return [f"test {nodes[r['unique_id']]['name']} ended with '{r['status']}' in the last run"
+            for r in tests if r["status"] != "pass"]
+
+
+def cmd_promote(only: str | None) -> int:
+    """Flip a complete draft to enforced and regenerate its contract."""
+    if not only:
+        raise SpecError("usage: specgen.py promote <model>")
+    conv = load_conventions()
+    path, spec = load_specs(only)[0]
+    if status_of(spec) != "draft":
+        print(f"{spec['model']} is already {status_of(spec)}")
+        return 0
+    errs, _ = validate(spec, conv, as_status="enforced")
+    errs += open_test_results(spec["model"])
+    if errs:
+        print(f"{RED}✗{RESET} {spec['model']} is not ready to enforce:")
+        for e in errs:
+            print(f"    {RED}-{RESET} {e}")
+        return 1
+    text = re.sub(r"(?m)^status:\s*draft\s*$", "status: enforced", path.read_text())
+    path.write_text(text)
+    print(f"{GREEN}✓{RESET} {spec['model']}: draft → enforced")
+    return cmd_generate(only)
+
+
 def main(argv: list[str]) -> int:
     commands = {"validate": cmd_validate, "generate": cmd_generate,
-                "status": cmd_status, "task": cmd_task}
-    if len(argv) < 2 or argv[1] not in commands:
-        print(__doc__)
-        return 2
-    only = argv[2] if len(argv) > 2 else None
+                "status": cmd_status, "task": cmd_task, "promote": cmd_promote}
+    parser = argparse.ArgumentParser(prog="specgen.py", description=__doc__,
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("command", choices=[*commands, "draft"])
+    parser.add_argument("target", nargs="?", help="model name (or relation, for draft)")
+    parser.add_argument("--as", dest="as_model", help="draft only: name of the new model")
+    args = parser.parse_args(argv[1:])
     try:
-        return commands[argv[1]](only)
+        if args.command == "draft":
+            if not args.target or not args.as_model:
+                raise SpecError("usage: specgen.py draft <relation> --as <model>")
+            return cmd_draft(args.target, args.as_model)
+        return commands[args.command](args.target)
     except SpecError as e:
         print(f"{RED}error:{RESET} {e}")
         return 1
 
 
 if __name__ == "__main__":
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
     sys.exit(main(sys.argv))

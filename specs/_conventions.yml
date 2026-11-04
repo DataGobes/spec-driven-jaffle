@@ -22,3 +22,8 @@ documentation:
   model_description_required: true
   column_description_required: true
   owner_required: true
+
+lifecycle:
+  # draft: tests report as warnings, contract not enforced, TODO docs allowed.
+  # enforced: every test and the contract fail the build.
+  statuses: [draft, enforced]

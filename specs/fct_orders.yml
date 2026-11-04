@@ -1,0 +1,47 @@
+# Started with `specgen draft stg_orders --as fct_orders`, then reviewed by a human:
+# descriptions filled in, the amount column and its rules added.
+model: fct_orders
+layer: marts
+status: enforced
+owner: data-team
+description: One row per order, with its status and total amount paid.
+
+grain: [order_id]
+
+depends_on: [stg_orders, stg_payments]
+
+columns:
+  - name: order_id
+    type: integer
+    description: Unique order identifier.
+    # profiled: 99 distinct, 0 nulls, 1 .. 99
+
+  - name: customer_id
+    type: integer
+    description: Customer who placed the order.
+    # profiled: 62 distinct, 0 nulls, 1 .. 99
+    references: stg_customers.customer_id  # every value exists there today
+
+  - name: order_date
+    type: date
+    description: Date the order was placed.
+    # profiled: 69 distinct, 0 nulls, 2018-01-01 .. 2018-04-09
+
+  - name: status
+    type: varchar
+    description: Current order status.
+    # profiled: 5 distinct, 0 nulls
+    accepted_values: [completed, placed, return_pending, returned, shipped]
+
+  - name: amount
+    type: decimal(18,2)
+    description: Total of all payments on the order, in dollars.
+    checks: ["amount >= 0"]
+
+rules:
+  - amount is the sum of all payments on the order, regardless of payment method.
+  - every order has at least one payment, so amount is never null.
+  - an order can be fully discounted: amount 0 is valid (see findings/fct_orders.md).
+
+expectations:
+  row_count_equals: stg_orders

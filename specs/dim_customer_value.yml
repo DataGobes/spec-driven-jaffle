@@ -1,5 +1,6 @@
 model: dim_customer_value
 layer: marts
+status: enforced
 owner: data-team
 description: >
   One row per customer with lifetime revenue and a value tier,

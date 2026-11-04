@@ -1,5 +1,6 @@
 model: fct_customer_monthly_revenue
 layer: marts
+status: enforced
 owner: data-team
 description: >
   Revenue per customer per calendar month. Only months in which the customer

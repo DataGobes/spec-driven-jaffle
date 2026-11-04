@@ -16,7 +16,7 @@ models/marts/_dim_customer_value.yml  ← generated: contract, constraints, test
 models/marts/dim_customer_value.sql   ← generated: the implementation
         │  dbt build
         ▼
-all 20 tests pass, or the build tells you exactly where SQL and spec disagree
+every test passes, or the build tells you exactly where SQL and spec disagree
 ```
 
 ## Run it (about a minute)
@@ -50,13 +50,46 @@ DBT_PROFILES_DIR=. dbt build --select +dim_customer_value
 
 Green means the agent's SQL matches the spec. Red tells you exactly where it doesn't.
 
+## From draft to enforced
+
+Writing a spec blind is finicky: you don't know the data yet, and the data rarely
+matches what you expected. So specs have a lifecycle.
+
+```bash
+python tools/specgen.py draft stg_orders --as fct_orders   # profile real data into a draft spec
+```
+
+The draft proposes columns, types, the grain (a column that is unique and never null),
+references, allowed values and ranges, from the data as it is today. A human reviews it,
+fills in the TODOs and adds the business rules.
+
+While a spec has `status: draft`, every test is a **warning** and the contract is not
+enforced: the model can meet real data without breaking the build. When a warning fires,
+the agent writes it up in `findings/<model>.md` with the query and example rows, and a
+human decides: fix the data upstream, or change the spec.
+
+That happened here. The reviewer added `amount > 0` to `fct_orders`, assuming every order
+costs something. The draft build warned on order 65: completed, paid with a $0 card
+payment. The finding is in [`findings/fct_orders.md`](findings/fct_orders.md); the
+decision was "free orders are real", so the spec became `amount >= 0` with a rule that
+says why.
+
+```bash
+python tools/specgen.py promote fct_orders   # refuses while docs have TODOs or any test still warns
+```
+
+`promote` reads dbt's own run results, so a spec only becomes `enforced` after it has met
+the data cleanly. From then on, every test fails the build.
+
 ## What's in here
 
 | Path | What it is |
 |---|---|
 | `specs/_conventions.yml` | Platform rules every spec inherits: naming, allowed types, key and documentation rules |
 | `specs/*.yml` | One spec per model: grain, columns, types, rules, expectations |
-| `tools/specgen.py` | Validates specs against the conventions and generates the dbt contracts |
+| `tools/specgen.py` | Validates specs, generates the dbt contracts, drafts and promotes specs |
+| `tools/profiler.py` | Profiles a table in the warehouse to propose a draft spec |
+| `findings/` | What the agent found when the data disagreed with a spec, and what was decided |
 | `macros/spec_tests/` | The generic tests the generated contracts use |
 | `prompts/implement_from_spec.md` | The prompt a coding agent gets to write the SQL |
 | `AGENTS.md` | The working agreement: spec → contract → implementation → verification |
@@ -71,6 +104,8 @@ Green means the agent's SQL matches the spec. Red tells you exactly where it doe
   the tests check grain, references, ranges and row counts on the actual rows.
 - **The agent may not edit the spec to pass a test.** A failing test is either a bug in the
   SQL or a finding about the spec, and a human decides which.
+- **Strictness is earned.** New specs start as drafts that warn, built from profiled data.
+  They become enforced only after a clean run on real data.
 
 ## Why not just write schema.yml?
 

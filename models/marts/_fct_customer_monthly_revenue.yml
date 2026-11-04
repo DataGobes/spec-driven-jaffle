@@ -10,6 +10,7 @@ models:
     contract:
       enforced: true
     meta:
+      status: enforced
       owner: data-team
       grain: &id001
       - customer_id
