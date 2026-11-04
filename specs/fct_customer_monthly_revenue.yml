@@ -1,0 +1,34 @@
+model: fct_customer_monthly_revenue
+layer: marts
+owner: data-team
+description: >
+  Revenue per customer per calendar month. Only months in which the customer
+  placed at least one non-returned order are included.
+
+grain: [customer_id, order_month]
+
+depends_on: [stg_orders, stg_payments]
+
+columns:
+  - name: customer_id
+    type: integer
+    description: Customer who placed the orders.
+    references: stg_customers.customer_id
+
+  - name: order_month
+    type: date
+    description: First day of the calendar month of the order date.
+
+  - name: order_count
+    type: integer
+    description: Number of non-returned orders in the month.
+    checks: ["order_count >= 1"]
+
+  - name: revenue
+    type: decimal(18,2)
+    description: Sum of payments on non-returned orders, in dollars.
+    checks: ["revenue >= 0"]
+
+rules:
+  - Orders with status 'returned' or 'return_pending' do not count as revenue.
+  - Revenue is the sum of all payments on an order, regardless of payment method.

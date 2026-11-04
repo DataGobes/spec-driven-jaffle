@@ -1,0 +1,24 @@
+# Platform conventions: written once, inherited by every spec.
+# specgen refuses to generate anything that breaks these rules.
+
+layers:
+  marts:
+    path: models/marts
+    allowed_prefixes: [fct_, dim_]
+    materialized: table
+    contract_enforced: true
+
+types:
+  # The only data types a spec may use. Keeps contracts portable.
+  allowed: [integer, bigint, varchar, date, timestamp, boolean, "decimal(18,2)"]
+  money: "decimal(18,2)"
+
+keys:
+  primary_key_required: true      # every model declares its grain
+  primary_key_tests: [not_null, unique]
+  foreign_key_test: relationships
+
+documentation:
+  model_description_required: true
+  column_description_required: true
+  owner_required: true

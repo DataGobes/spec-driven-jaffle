@@ -1,0 +1,42 @@
+model: dim_customer_value
+layer: marts
+owner: data-team
+description: >
+  One row per customer with lifetime revenue and a value tier,
+  for targeting and reporting.
+
+grain: [customer_id]
+
+depends_on: [stg_customers, fct_customer_monthly_revenue]
+
+columns:
+  - name: customer_id
+    type: integer
+    description: Unique customer identifier.
+    references: stg_customers.customer_id
+
+  - name: first_name
+    type: varchar
+    description: Customer first name.
+
+  - name: active_months
+    type: integer
+    description: Number of months with at least one non-returned order.
+    checks: ["active_months >= 0"]
+
+  - name: lifetime_revenue
+    type: decimal(18,2)
+    description: Total revenue across all months, in dollars. 0 when none.
+    checks: ["lifetime_revenue >= 0"]
+
+  - name: value_tier
+    type: varchar
+    description: Segment based on lifetime revenue.
+    accepted_values: [high, medium, low, none]
+
+rules:
+  - Every customer appears, including customers without revenue.
+  - value_tier is 'high' from 50 dollars, 'medium' from 20, 'low' above 0, else 'none'.
+
+expectations:
+  row_count_equals: stg_customers
