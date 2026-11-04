@@ -339,7 +339,11 @@ def open_test_results(model: str) -> list[str]:
         return [f"no dbt results found: run `dbt build --select {model}` first"]
     model_id = next((k for k, n in nodes.items()
                      if n.get("resource_type") == "model" and n.get("name") == model), None)
-    tests = [r for r in results if nodes.get(r["unique_id"], {}).get("attached_node") == model_id]
+    if model_id is None:
+        return [f"{model} has not been built yet: implement it, then run `dbt build --select {model}`"]
+    tests = [r for r in results
+             if nodes.get(r["unique_id"], {}).get("resource_type") == "test"
+             and nodes[r["unique_id"]].get("attached_node") == model_id]
     if not tests:
         return [f"{model} was not tested in the last dbt run: run `dbt build --select {model}`"]
     return [f"test {nodes[r['unique_id']]['name']} ended with '{r['status']}' in the last run"
