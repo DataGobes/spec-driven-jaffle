@@ -1,0 +1,7 @@
+spec_driven_jaffle:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: jaffle.duckdb
+      threads: 4
