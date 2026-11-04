@@ -1,0 +1,108 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; font-family: var(--font-display); }
+    .vf-win {
+      position: absolute; left: 72px; width: 936px; background: var(--win);
+      border-radius: 14px; overflow: hidden; box-shadow: 0 18px 40px rgba(0,0,0,.22);
+    }
+    #vf-term { top: 140px; height: 214px; }
+    #vf-table { top: 378px; height: 470px; }
+    .vf-bar {
+      height: 52px; background: var(--win-bar); display: flex; align-items: center;
+      padding: 0 22px; gap: 10px; color: #8f97a2; font: 500 24px var(--font-display);
+    }
+    .vf-dot { width: 13px; height: 13px; border-radius: 50%; background: #3a3f46; }
+    .vf-tab { margin-left: 14px; color: var(--win-ink); }
+    .vf-body { padding: 18px 30px; font: 500 25px/36px var(--font-mono); color: var(--win-ink); }
+    .vf-m { color: var(--win-muted); }
+    #vf-cmd { display: inline-block; vertical-align: top; }
+    #vf-prog { display: flex; gap: 5px; margin-top: 22px; align-items: center; }
+    .vf-seg { width: 26px; height: 26px; border-radius: 3px; background: #2c3138; }
+    #vf-ctr { margin-left: 18px; font: 600 26px var(--font-mono); color: var(--win-ink); white-space: pre; }
+    .vf-row {
+      position: relative; display: flex; align-items: center; height: 80px;
+      padding: 0 30px; border-bottom: 1px solid #262b31; color: #9aa2ad;
+    }
+    .vf-row:last-child { border-bottom: none; }
+    .vf-band {
+      position: absolute; inset: 0; background: rgba(63,180,106,.14);
+      border-left: 5px solid var(--color-pass); transform-origin: left center; transform: scaleX(0);
+    }
+    .vf-name { position: relative; width: 250px; font: 600 30px var(--font-display); color: var(--win-ink); }
+    .vf-what { position: relative; flex: 1; font: 500 24px var(--font-mono); }
+    .vf-n { position: relative; font: 600 25px var(--font-mono); color: var(--color-pass); white-space: pre; }
+    #vf-stamp {
+      position: absolute; left: 230px; top: 520px; width: 620px; padding: 22px 0;
+      background: var(--color-pass); color: #0f2a19; border-radius: 8px; text-align: center;
+      font: 700 64px/1 var(--font-display); letter-spacing: -0.01em; opacity: 0;
+      box-shadow: 0 18px 40px rgba(0,0,0,.25);
+    }
+    #vf-stamp small { display: block; font: 600 26px var(--font-display); margin-top: 10px; letter-spacing: 0.02em; }
+  </style>
+  <div id="root" data-composition-id="verify" data-width="1080" data-height="1080">
+    <div id="vf-stage" class="clip" data-start="0" data-duration="10.2" data-layout-allow-overlap>
+      <div class="vf-win" id="vf-term">
+        <div class="vf-bar">
+          <span class="vf-dot"></span><span class="vf-dot"></span><span class="vf-dot"></span>
+          <span class="vf-tab">terminal</span>
+        </div>
+        <div class="vf-body">
+          <div><span class="vf-m">$ </span><span id="vf-cmd">dbt build --select +dim_customer_value</span></div>
+          <div id="vf-prog">
+            <i class="vf-seg"></i><i class="vf-seg"></i><i class="vf-seg"></i><i class="vf-seg"></i><i class="vf-seg"></i>
+            <i class="vf-seg"></i><i class="vf-seg"></i><i class="vf-seg"></i><i class="vf-seg"></i><i class="vf-seg"></i>
+            <i class="vf-seg"></i><i class="vf-seg"></i><i class="vf-seg"></i><i class="vf-seg"></i><i class="vf-seg"></i>
+            <i class="vf-seg"></i><i class="vf-seg"></i><i class="vf-seg"></i><i class="vf-seg"></i><i class="vf-seg"></i>
+            <span id="vf-ctr">PASS  0/20</span>
+          </div>
+        </div>
+      </div>
+      <div class="vf-win" id="vf-table">
+        <div class="vf-bar">
+          <span class="vf-dot"></span><span class="vf-dot"></span><span class="vf-dot"></span>
+          <span class="vf-tab">tests on real rows</span>
+        </div>
+        <div class="vf-row" id="vf-r1"><i class="vf-band"></i><span class="vf-name">Grain</span><span class="vf-what">unique · not_null · key combos</span><span class="vf-n">5 ✓</span></div>
+        <div class="vf-row" id="vf-r2"><i class="vf-band"></i><span class="vf-name">References</span><span class="vf-what">customer_id → stg_customers</span><span class="vf-n">2 ✓</span></div>
+        <div class="vf-row" id="vf-r3"><i class="vf-band"></i><span class="vf-name">Ranges</span><span class="vf-what">revenue ≥ 0 · tiers allowed</span><span class="vf-n">5 ✓</span></div>
+        <div class="vf-row" id="vf-r4"><i class="vf-band"></i><span class="vf-name">Row counts</span><span class="vf-what">rows = stg_customers</span><span class="vf-n">1 ✓</span></div>
+        <div class="vf-row" id="vf-r5"><i class="vf-band"></i><span class="vf-name">Upstream</span><span class="vf-what">staging models</span><span class="vf-n">7 ✓</span></div>
+      </div>
+      <div id="vf-stamp">20 / 20 PASS</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#vf-term", { opacity: 0, y: 40, filter: "blur(8px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0.1);
+    tl.fromTo("#vf-cmd", { clipPath: "inset(0 100% 0 0)" },
+      { clipPath: "inset(0 0% 0 0)", duration: 0.7, ease: "none" }, 0.35);
+    tl.fromTo("#vf-table", { opacity: 0, y: 40, filter: "blur(8px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 2.4);
+    // 20 tests tick green, counter follows
+    const segs = gsap.utils.toArray("#vf-prog .vf-seg");
+    const t0 = 1.25, step = 0.33;
+    segs.forEach((s, i) => {
+      tl.fromTo(s, { backgroundColor: "#2c3138" }, { backgroundColor: "#3fb46a", duration: 0.12 }, t0 + i * step);
+    });
+    const ctr = { n: 0 };
+    const ctrEl = document.querySelector("#vf-ctr");
+    tl.fromTo(ctr, { n: 0 }, {
+      n: 20, duration: step * 19 + 0.12, ease: "none",
+      onUpdate: () => { ctrEl.textContent = "PASS " + String(Math.round(ctr.n)).padStart(2, " ") + "/20"; }
+    }, t0);
+    // categories light on their words
+    [["#vf-r1", 3.55], ["#vf-r2", 4.27], ["#vf-r3", 5.2], ["#vf-r4", 6.16], ["#vf-r5", 7.25]].forEach(([s, t]) => {
+      tl.fromTo(s + " .vf-band", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, t);
+    });
+    // payoff on "All green"
+    tl.fromTo("#vf-table", { opacity: 1 }, { opacity: 0.35, duration: 0.3, ease: "power2.inOut", immediateRender: false }, 8.2);
+    tl.fromTo("#vf-stamp", { opacity: 0, scale: 1.3, rotation: -4 },
+      { opacity: 1, scale: 1, rotation: -4, duration: 0.35, ease: "back.out(1.6)" }, 8.45);
+    tl.fromTo("#vf-term, #vf-stamp", { opacity: 1, filter: "blur(0px)" },
+      { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in", immediateRender: false }, 10.0);
+    tl.fromTo("#vf-table", { opacity: 0.35 },
+      { opacity: 0, duration: 0.2, ease: "power3.in", immediateRender: false }, 10.0);
+    window.__timelines["verify"] = tl;
+  </script>
+</template>

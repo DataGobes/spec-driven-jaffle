@@ -1,0 +1,70 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; font-family: var(--font-display); color: var(--color-ink); }
+    .rs-tile {
+      position: absolute; top: 150px; height: 170px; width: 380px; border-radius: 14px;
+      padding: 26px 28px; box-shadow: 0 18px 40px rgba(0,0,0,.18);
+    }
+    #rs-spec { left: 72px; width: 350px; background: #f1eee8; border: 3px solid var(--color-spec); }
+    #rs-table { left: 584px; width: 424px; background: var(--win); color: var(--win-ink); }
+    .rs-lbl { font: 600 22px var(--font-display); letter-spacing: .06em; color: #6b665e; }
+    #rs-table .rs-lbl { color: var(--win-muted); }
+    .rs-file { margin-top: 12px; font: 500 26px/1.3 var(--font-mono); }
+    #rs-rows { margin-top: 10px; font: 600 26px var(--font-mono); color: var(--color-pass); opacity: 0; }
+    #rs-arrow {
+      position: absolute; left: 438px; top: 220px; width: 140px; height: 30px;
+    }
+    #rs-arrow i { position: absolute; left: 0; top: 13px; height: 5px; width: 120px; background: var(--color-ink); transform-origin: left center; }
+    #rs-arrow b {
+      position: absolute; left: 112px; top: 3px; width: 0; height: 0;
+      border-left: 26px solid var(--color-ink); border-top: 12px solid transparent; border-bottom: 12px solid transparent;
+    }
+    #rs-chart { position: absolute; left: 72px; top: 400px; width: 936px; }
+    #rs-title { font: 700 40px var(--font-display); letter-spacing: -0.01em; margin-bottom: 28px; opacity: 0; }
+    .rs-row { display: flex; align-items: center; height: 92px; }
+    .rs-tier { width: 170px; font: 600 32px var(--font-display); }
+    .rs-track { position: relative; width: 560px; height: 54px; }
+    .rs-bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--color-ink); border-radius: 4px; transform-origin: left center; transform: scaleX(0); }
+    .rs-none .rs-bar { background: #9a958c; }
+    .rs-val { margin-left: 22px; font: 500 28px var(--font-mono); white-space: pre; opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="result" data-width="1080" data-height="1080">
+    <div id="rs-stage" class="clip" data-start="0" data-duration="7">
+      <div class="rs-tile" id="rs-spec">
+        <div class="rs-lbl">ONE SPEC IN</div>
+        <div class="rs-file">dim_customer_value<br />.yml</div>
+      </div>
+      <div id="rs-arrow"><i></i><b></b></div>
+      <div class="rs-tile" id="rs-table">
+        <div class="rs-lbl">ONE TESTED TABLE OUT</div>
+        <div class="rs-file">dim_customer_value</div>
+        <div id="rs-rows">100 / 100 customers ✓</div>
+      </div>
+      <div id="rs-chart">
+        <div id="rs-title">Customers by value tier</div>
+        <div class="rs-row" id="rs-h"><span class="rs-tier">high</span><span class="rs-track"><i class="rs-bar" style="width:70px"></i></span><span class="rs-val">  5 · $339</span></div>
+        <div class="rs-row" id="rs-m"><span class="rs-tier">medium</span><span class="rs-track"><i class="rs-bar" style="width:462px"></i></span><span class="rs-val"> 33 · $1,043</span></div>
+        <div class="rs-row" id="rs-l"><span class="rs-tier">low</span><span class="rs-track"><i class="rs-bar" style="width:308px"></i></span><span class="rs-val"> 22 · $203</span></div>
+        <div class="rs-row rs-none" id="rs-n"><span class="rs-tier">none</span><span class="rs-track"><i class="rs-bar" style="width:560px"></i></span><span class="rs-val"> 40 · $0</span></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#rs-spec", { opacity: 0, y: 40, filter: "blur(8px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0.3);
+    tl.fromTo("#rs-arrow i", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.inOut" }, 1.55);
+    tl.fromTo("#rs-arrow b", { opacity: 0 }, { opacity: 1, duration: 0.15 }, 1.85);
+    tl.fromTo("#rs-table", { opacity: 0, y: 40, filter: "blur(8px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 1.88);
+    tl.fromTo("#rs-rows", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.6)" }, 3.7);
+    tl.fromTo("#rs-title", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2 }, 4.85);
+    ["#rs-h", "#rs-m", "#rs-l", "#rs-n"].forEach((s, i) => {
+      tl.fromTo(s + " .rs-bar", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "expo.out" }, 5.1 + i * 0.1);
+      tl.fromTo(s + " .rs-val", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 5.45 + i * 0.1);
+    });
+    tl.fromTo("#rs-stage > *", { opacity: 1, filter: "blur(0px)" },
+      { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in", immediateRender: false }, 6.75);
+    window.__timelines["result"] = tl;
+  </script>
+</template>

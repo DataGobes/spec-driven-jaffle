@@ -1,0 +1,53 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    .cp-g {
+      position: absolute; left: 0; right: 0; top: 948px; text-align: center; overflow: visible;
+      font: 600 36px/1.2 var(--font-display); color: var(--color-ink); opacity: 0;
+    }
+  </style>
+  <div id="root" data-composition-id="captions" data-width="1080" data-height="1080">
+    <div id="cp-stage" class="clip" data-start="0" data-duration="61.6" data-layout-allow-caption-zone>
+      <div class="cp-g" id="cp-0">Your coding agent just wrote</div>
+      <div class="cp-g" id="cp-1">a new dbt model.</div>
+      <div class="cp-g" id="cp-2">It runs.</div>
+      <div class="cp-g" id="cp-3">Start with a spec instead.</div>
+      <div class="cp-g" id="cp-4">Grain, types, allowed values</div>
+      <div class="cp-g" id="cp-5">and business rules,</div>
+      <div class="cp-g" id="cp-6">reviewed by a human</div>
+      <div class="cp-g" id="cp-7">before any code exists.</div>
+      <div class="cp-g" id="cp-8">A small generator turns that</div>
+      <div class="cp-g" id="cp-9">spec into an enforced dbt</div>
+      <div class="cp-g" id="cp-10">contract, plus seven tests.</div>
+      <div class="cp-g" id="cp-11">Platform conventions come</div>
+      <div class="cp-g" id="cp-12">along for free.</div>
+      <div class="cp-g" id="cp-13">Then the agent</div>
+      <div class="cp-g" id="cp-14">writes the SQL.</div>
+      <div class="cp-g" id="cp-15">Every rule from the spec,</div>
+      <div class="cp-g" id="cp-16">implemented literally.</div>
+      <div class="cp-g" id="cp-17">And it is not allowed</div>
+      <div class="cp-g" id="cp-18">to change the spec.</div>
+      <div class="cp-g" id="cp-19">dbt build checks it</div>
+      <div class="cp-g" id="cp-20">against real data.</div>
+      <div class="cp-g" id="cp-21">Grain, references, ranges</div>
+      <div class="cp-g" id="cp-22">and row counts.</div>
+      <div class="cp-g" id="cp-23">Twenty tests.</div>
+      <div class="cp-g" id="cp-24">All green.</div>
+      <div class="cp-g" id="cp-25">One spec in.</div>
+      <div class="cp-g" id="cp-26">One tested table out:</div>
+      <div class="cp-g" id="cp-27">every customer,</div>
+      <div class="cp-g" id="cp-28">with a value tier.</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const T = [[0.35,2.04],[2.04,3.43],[3.43,4.77],[8.65,10.77],[10.77,13.18],[13.18,14.69],[14.69,16.20],[16.20,18.05],[18.25,20.23],[20.23,22.07],[22.07,24.78],[24.78,25.93],[25.93,27.26],[27.65,28.76],[28.76,30.47],[30.47,32.11],[32.11,33.95],[33.95,34.97],[34.97,36.50],[37.05,38.53],[38.53,40.30],[40.30,42.67],[42.67,44.00],[44.00,45.18],[45.18,46.46],[47.25,48.83],[48.83,50.63],[50.63,51.71],[51.71,53.22]];
+    T.forEach(([a, b], i) => {
+      const g = "#cp-" + i;
+      tl.fromTo(g, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, a);
+      tl.to(g, { opacity: 0, duration: 0.08, ease: "power2.in" }, b - 0.08);
+      tl.set(g, { opacity: 0, visibility: "hidden" }, b);
+    });
+    window.__timelines["captions"] = tl;
+  </script>
+</template>

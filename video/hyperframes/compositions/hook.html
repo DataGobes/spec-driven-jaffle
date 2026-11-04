@@ -1,0 +1,61 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; font-family: var(--font-display); }
+    .hk-win {
+      position: absolute; left: 96px; top: 150px; width: 888px; height: 300px;
+      background: var(--win); border-radius: 14px; overflow: hidden;
+      box-shadow: 0 18px 40px rgba(0,0,0,.22);
+    }
+    .hk-bar {
+      height: 52px; background: var(--win-bar); display: flex; align-items: center;
+      padding: 0 22px; gap: 10px; color: #8f97a2; font: 500 24px var(--font-display);
+    }
+    .hk-dot { width: 13px; height: 13px; border-radius: 50%; background: #3a3f46; }
+    .hk-title { margin-left: 14px; }
+    .hk-body { padding: 26px 30px; font: 500 27px/1.55 var(--font-mono); color: var(--win-ink); }
+    .hk-line { white-space: pre; opacity: 0; }
+    .hk-muted { color: var(--win-muted); }
+    .hk-ok { color: var(--color-pass); }
+    #hk-q {
+      position: absolute; left: 96px; top: 540px; width: 888px;
+      font: 700 70px/1.12 var(--font-display); letter-spacing: -0.015em; color: var(--color-ink);
+    }
+    #hk-q span { display: inline-block; opacity: 0; margin-right: 0.22em; }
+    #hk-q .hk-acc { color: #8f5410; }
+  </style>
+  <div id="root" data-composition-id="hook" data-width="1080" data-height="1080">
+    <div id="hk-stage" class="clip" data-start="0" data-duration="8.4">
+      <div id="hk-wrap"><div class="hk-win" id="hk-win">
+        <div class="hk-bar">
+          <span class="hk-dot"></span><span class="hk-dot"></span><span class="hk-dot"></span>
+          <span class="hk-title">coding agent</span>
+        </div>
+        <div class="hk-body">
+          <div class="hk-line hk-muted" id="hk-l1" style="opacity:1">&gt; add a customer value table</div>
+          <div class="hk-line" id="hk-l2"><span class="hk-ok">✓</span> wrote dim_customer_value.sql</div>
+          <div class="hk-line" id="hk-l3"><span class="hk-ok">✓</span> dbt run  <span class="hk-ok">OK</span></div>
+        </div>
+      </div></div>
+      <div id="hk-q"><span id="hk-w1">Does</span><span id="hk-w2">it</span><span id="hk-w3">do</span><span id="hk-w4">what</span><span id="hk-w5">the</span><span id="hk-w6">business</span><span id="hk-w7">actually</span><span id="hk-w8" class="hk-acc">asked</span><span id="hk-w9" class="hk-acc">for?</span></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#hk-l2", { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: 0.35, ease: "expo.out" }, 1.75);
+    tl.fromTo("#hk-l3", { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: 0.35, ease: "expo.out" }, 3.55);
+    // the question, word by word on the voice
+    const words = [5.05, 5.3, 5.46, 5.62, 5.87, 6.07, 6.52, 6.97, 7.28];
+    words.forEach((t, i) => {
+      tl.fromTo("#hk-w" + (i + 1), { opacity: 0, filter: "blur(6px)" },
+        { opacity: 1, filter: "blur(0px)", duration: 0.14, ease: "power2.out" }, t);
+    });
+    // the agent window recedes once the question takes over
+    tl.fromTo("#hk-win", { opacity: 1 }, { opacity: 0.45, duration: 0.5, ease: "power2.inOut" }, 4.7);
+    // blur-swap exit
+    tl.fromTo("#hk-q", { opacity: 1, filter: "blur(0px)" },
+      { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in", immediateRender: false }, 8.15);
+    tl.fromTo("#hk-wrap", { opacity: 1 },
+      { opacity: 0, duration: 0.2, ease: "power3.in", immediateRender: false }, 8.15);
+    window.__timelines["hook"] = tl;
+  </script>
+</template>

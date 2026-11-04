@@ -1,0 +1,36 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; font-family: var(--font-display); color: var(--color-ink); }
+    .cl-line { position: absolute; left: 96px; width: 900px; font: 700 76px/1.1 var(--font-display); letter-spacing: -0.015em; }
+    #cl-1 { top: 300px; }
+    #cl-2 { top: 510px; }
+    .cl-line span { display: inline-block; margin-right: 0.22em; color: #b9b4aa; }
+    #cl-repo {
+      position: absolute; left: 96px; top: 800px; font: 500 30px var(--font-mono); color: var(--color-ink);
+      border-top: 4px solid var(--color-ink); padding-top: 18px; opacity: 0;
+    }
+  </style>
+  <div id="root" data-composition-id="close" data-width="1080" data-height="1080">
+    <div id="cl-stage" class="clip" data-start="0" data-duration="7.6">
+      <div class="cl-line" id="cl-1"><span>The</span><span id="cl-spec">spec</span><span>is</span><span>the</span><span>source</span><span>of</span><span>truth.</span></div>
+      <div class="cl-line" id="cl-2"><span>The</span><span>SQL</span><span>is</span><span>just</span><span>its</span><span>latest</span><span>implementation.</span></div>
+      <div id="cl-repo" data-var-text="repo-url">github.com/DataGobes/spec-driven-jaffle</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // each word turns from light grey to ink as it is spoken
+    const l1 = [0.4, 0.65, 0.95, 1.14, 1.39, 1.82, 2.0];
+    const l2 = [2.88, 3.16, 3.42, 3.63, 3.98, 4.25, 4.73];
+    gsap.utils.toArray("#cl-1 span").forEach((el, i) => {
+      const to = el.id === "cl-spec" ? "#8f5410" : "#1a1c1f";
+      tl.fromTo(el, { color: "#b9b4aa" }, { color: to, duration: 0.09, ease: "none" }, l1[i]);
+    });
+    gsap.utils.toArray("#cl-2 span").forEach((el, i) => {
+      tl.fromTo(el, { color: "#b9b4aa" }, { color: "#1a1c1f", duration: 0.09, ease: "none" }, l2[i]);
+    });
+    tl.fromTo("#cl-repo", { opacity: 0, filter: "blur(8px)" },
+      { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power2.out" }, 5.3);
+    window.__timelines["close"] = tl;
+  </script>
+</template>

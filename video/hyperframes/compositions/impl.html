@@ -1,0 +1,96 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; font-family: var(--font-display); }
+    .im-win {
+      position: absolute; left: 72px; width: 936px; background: var(--win);
+      border-radius: 14px; overflow: hidden; box-shadow: 0 18px 40px rgba(0,0,0,.22);
+    }
+    #im-spec { top: 140px; height: 168px; }
+    #im-sql { top: 330px; height: 580px; }
+    .im-bar {
+      height: 52px; background: var(--win-bar); display: flex; align-items: center;
+      padding: 0 22px; gap: 10px; color: #8f97a2; font: 500 24px var(--font-display);
+    }
+    .im-dot { width: 13px; height: 13px; border-radius: 50%; background: #3a3f46; }
+    .im-tab { margin-left: 14px; color: var(--win-ink); }
+    .im-tag { margin-left: auto; color: #8f97a2; font: 500 22px var(--font-display); }
+    #im-lock {
+      margin-left: auto; padding: 4px 12px; border: 2px solid var(--color-spec); border-radius: 4px;
+      color: var(--color-spec); font: 600 18px var(--font-display); letter-spacing: .06em; opacity: 0;
+    }
+    .im-body { padding: 14px 30px; font: 500 25px/36px var(--font-mono); color: var(--win-ink); }
+    .im-l { white-space: pre; height: 36px; position: relative; }
+    .im-l > span { position: relative; }
+    .im-k { color: var(--win-key); }
+    .im-m { color: var(--win-muted); }
+    .im-str { color: #c9b98f; }
+    .im-band {
+      position: absolute; left: -30px; right: -30px; top: 0; bottom: 0;
+      background: rgba(232,163,61,.2); border-left: 5px solid var(--color-spec);
+      transform-origin: left center; transform: scaleX(0);
+    }
+    .im-rule { color: var(--color-spec); }
+    .im-chk { color: var(--color-spec); opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="impl" data-width="1080" data-height="1080">
+    <div id="im-stage" class="clip" data-start="0" data-duration="9.4">
+      <div class="im-win" id="im-spec">
+        <div class="im-bar">
+          <span class="im-dot"></span><span class="im-dot"></span><span class="im-dot"></span>
+          <span class="im-tab">spec · rules</span>
+          <span id="im-lock">READ-ONLY FOR AGENTS</span>
+        </div>
+        <div class="im-body">
+          <div class="im-l" id="im-s1"><i class="im-band"></i><span>- every customer appears  <span class="im-chk" id="im-k1">✓ implemented</span></span></div>
+          <div class="im-l" id="im-s2"><i class="im-band"></i><span>- high ≥ 50 · medium ≥ 20 · low &gt; 0  <span class="im-chk" id="im-k2">✓</span></span></div>
+        </div>
+      </div>
+      <div class="im-win" id="im-sql">
+        <div class="im-bar">
+          <span class="im-dot"></span><span class="im-dot"></span><span class="im-dot"></span>
+          <span class="im-tab">dim_customer_value.sql</span>
+          <span class="im-tag">written by the agent</span>
+        </div>
+        <div class="im-body">
+          <div class="im-l im-ln"><span><span class="im-k">with</span> revenue <span class="im-k">as</span> (</span></div>
+          <div class="im-l im-ln"><span>  <span class="im-k">select</span> customer_id, <span class="im-k">count</span>(*) <span class="im-k">as</span> active_months,</span></div>
+          <div class="im-l im-ln"><span>         <span class="im-k">sum</span>(revenue) <span class="im-k">as</span> lifetime_revenue</span></div>
+          <div class="im-l im-ln"><span>  <span class="im-k">from</span> <span class="im-str">{{ ref('fct_customer_monthly_revenue') }}</span></span></div>
+          <div class="im-l im-ln"><span>  <span class="im-k">group by</span> customer_id)</span></div>
+          <div class="im-l im-ln" id="im-r1"><i class="im-band"></i><span class="im-rule">-- rule: every customer appears</span></div>
+          <div class="im-l im-ln"><span><span class="im-k">select</span> c.customer_id, c.first_name, ...</span></div>
+          <div class="im-l im-ln"><span><span class="im-k">from</span> <span class="im-str">{{ ref('stg_customers') }}</span> c</span></div>
+          <div class="im-l im-ln"><span><span class="im-k">left join</span> revenue r <span class="im-k">using</span> (customer_id)</span></div>
+          <div class="im-l im-ln" id="im-r2"><i class="im-band"></i><span class="im-rule">-- rule: high ≥ 50, medium ≥ 20, low &gt; 0</span></div>
+          <div class="im-l im-ln"><span><span class="im-k">case when</span> lifetime_revenue &gt;= 50 <span class="im-k">then</span> <span class="im-str">'high'</span> ...</span></div>
+          <div class="im-l im-ln"><span><span class="im-k">end as</span> value_tier</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#im-spec", { opacity: 0, y: 40, filter: "blur(8px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0.1);
+    tl.fromTo("#im-sql", { opacity: 0, y: 40, filter: "blur(8px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0.45);
+    // the agent types the SQL, line by line
+    gsap.utils.toArray("#im-sql .im-ln").forEach((el, i) => {
+      tl.fromTo(el, { clipPath: "inset(0 100% 0 0)" },
+        { clipPath: "inset(0 0% 0 0)", duration: 0.2, ease: "none" }, 1.25 + i * 0.24);
+    });
+    // every rule: spec line and the comment that implements it light together
+    tl.fromTo("#im-s1 .im-band", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, 3.43);
+    tl.fromTo("#im-r1 .im-band", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, 3.43);
+    tl.fromTo("#im-s2 .im-band", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, 4.15);
+    tl.fromTo("#im-r2 .im-band", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, 4.15);
+    tl.fromTo("#im-k1", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 4.8);
+    tl.fromTo("#im-k2", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 4.95);
+    // not allowed to change the spec
+    tl.fromTo("#im-lock", { opacity: 0, scale: 0.85 },
+      { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.6)" }, 7.1);
+    tl.fromTo("#im-spec, #im-sql", { opacity: 1, filter: "blur(0px)" },
+      { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in", immediateRender: false }, 9.15);
+    window.__timelines["impl"] = tl;
+  </script>
+</template>

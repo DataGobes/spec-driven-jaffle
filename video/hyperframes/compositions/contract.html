@@ -1,0 +1,108 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; font-family: var(--font-display); }
+    .ct-win {
+      position: absolute; left: 72px; width: 936px; background: var(--win);
+      border-radius: 14px; overflow: hidden; box-shadow: 0 18px 40px rgba(0,0,0,.22);
+    }
+    #ct-term { top: 140px; height: 236px; }
+    #ct-gen { top: 400px; height: 510px; }
+    .ct-bar {
+      height: 52px; background: var(--win-bar); display: flex; align-items: center;
+      padding: 0 22px; gap: 10px; color: #8f97a2; font: 500 24px var(--font-display);
+    }
+    .ct-dot { width: 13px; height: 13px; border-radius: 50%; background: #3a3f46; }
+    .ct-tab { margin-left: 14px; color: var(--win-ink); }
+    .ct-gentag {
+      margin-left: auto; padding: 4px 12px; border: 2px solid var(--color-contract);
+      border-radius: 4px; color: var(--color-contract); font: 600 18px var(--font-display); letter-spacing: .06em;
+    }
+    .ct-body { padding: 18px 30px; font: 500 25px/36px var(--font-mono); color: var(--win-ink); }
+    .ct-l { white-space: pre; height: 36px; position: relative; }
+    .ct-k { color: var(--win-key); }
+    .ct-m { color: var(--win-muted); }
+    .ct-ok { color: var(--color-pass); }
+    .ct-c { color: var(--color-contract); }
+    .ct-s { color: var(--color-spec); }
+    .ct-type { display: inline-block; overflow: hidden; vertical-align: top; }
+    .ct-band {
+      position: absolute; left: -30px; right: -30px; top: 0; bottom: 0;
+      background: rgba(95,168,200,.2); border-left: 5px solid var(--color-contract);
+      transform-origin: left center; transform: scaleX(0);
+    }
+    .ct-l > span { position: relative; }
+    #ct-chips {
+      position: absolute; left: 30px; right: 30px; top: 384px;
+      display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+    }
+    .ct-chip {
+      padding: 7px 13px; border: 2px solid var(--color-contract); border-radius: 4px;
+      color: var(--win-ink); font: 500 21px var(--font-mono); opacity: 0;
+    }
+    #ct-count { color: var(--color-contract); font: 700 26px var(--font-display); margin-right: 6px; opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="contract" data-width="1080" data-height="1080">
+    <div id="ct-stage" class="clip" data-start="0" data-duration="9.4">
+      <div class="ct-win" id="ct-term">
+        <div class="ct-bar">
+          <span class="ct-dot"></span><span class="ct-dot"></span><span class="ct-dot"></span>
+          <span class="ct-tab">terminal</span>
+        </div>
+        <div class="ct-body">
+          <div class="ct-l"><span class="ct-m">$ </span><span class="ct-type" id="ct-cmd">python tools/specgen.py generate</span></div>
+          <div class="ct-l" id="ct-o1"><span class="ct-ok">✓</span> dim_customer_value <span class="ct-m">spec is valid</span></div>
+          <div class="ct-l" id="ct-o2"><span class="ct-c">→</span> _dim_customer_value.yml <span class="ct-m">contract enforced</span></div>
+          <div class="ct-l" id="ct-o3"><span class="ct-m">↳ + _conventions.yml: </span>naming · types · keys · docs</div>
+        </div>
+      </div>
+      <div class="ct-win" id="ct-gen">
+        <div class="ct-bar">
+          <span class="ct-dot"></span><span class="ct-dot"></span><span class="ct-dot"></span>
+          <span class="ct-tab">_dim_customer_value.yml</span>
+          <span class="ct-gentag">GENERATED · DO NOT EDIT</span>
+        </div>
+        <div class="ct-body">
+          <div class="ct-l" id="ct-enf"><i class="ct-band"></i><span><span class="ct-k">contract:</span> {<span class="ct-k">enforced:</span> true}</span></div>
+          <div class="ct-l"><span class="ct-k">columns:</span></div>
+          <div class="ct-l">  - <span class="ct-k">name:</span> customer_id</div>
+          <div class="ct-l">    <span class="ct-k">data_type:</span> integer</div>
+          <div class="ct-l">    <span class="ct-k">data_tests:</span> [not_null, unique, relationships]</div>
+          <div class="ct-l">  - <span class="ct-k">name:</span> value_tier</div>
+          <div class="ct-l">    <span class="ct-k">data_type:</span> varchar</div>
+          <div class="ct-l">    <span class="ct-k">data_tests:</span> [accepted_values]</div>
+        </div>
+        <div id="ct-chips">
+          <span id="ct-count">7 tests</span>
+          <span class="ct-chip" id="ct-c1">not_null</span>
+          <span class="ct-chip" id="ct-c2">unique</span>
+          <span class="ct-chip" id="ct-c3">relationships</span>
+          <span class="ct-chip" id="ct-c4">accepted_values</span>
+          <span class="ct-chip" id="ct-c5">active_months ≥ 0</span>
+          <span class="ct-chip" id="ct-c6">lifetime_revenue ≥ 0</span>
+          <span class="ct-chip" id="ct-c7">rows = stg_customers</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#ct-term", { opacity: 0, y: 40, filter: "blur(8px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0.1);
+    tl.fromTo("#ct-cmd", { clipPath: "inset(0 100% 0 0)" },
+      { clipPath: "inset(0 0% 0 0)", duration: 0.8, ease: "none" }, 0.35);
+    tl.fromTo("#ct-o1", { opacity: 0 }, { opacity: 1, duration: 0.15 }, 1.5);
+    tl.fromTo("#ct-o2", { opacity: 0 }, { opacity: 1, duration: 0.15 }, 2.2);
+    tl.fromTo("#ct-gen", { opacity: 0, y: 40, filter: "blur(8px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 2.3);
+    tl.fromTo("#ct-enf .ct-band", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, 3.18);
+    tl.fromTo("#ct-count", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 5.25);
+    for (let i = 1; i <= 7; i++) {
+      tl.fromTo("#ct-c" + i, { opacity: 0, scale: 0.85 },
+        { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.6)" }, 5.35 + (i - 1) * 0.12);
+    }
+    tl.fromTo("#ct-o3", { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: 0.35, ease: "expo.out" }, 6.85);
+    tl.fromTo("#ct-term, #ct-gen", { opacity: 1, filter: "blur(0px)" },
+      { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in", immediateRender: false }, 9.15);
+    window.__timelines["contract"] = tl;
+  </script>
+</template>

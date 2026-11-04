@@ -59,3 +59,8 @@ Rename `value_tier` to `tier` in `models/marts/dim_customer_value.sql` and run
 Seed data and staging models from dbt Labs'
 [jaffle_shop](https://github.com/dbt-labs/jaffle-shop-classic) (Apache 2.0, see
 `LICENSE-jaffle-shop`).
+
+## Video
+
+`video/hyperframes/` contains the 60-second explainer for this repo as a HyperFrames
+project. See `video/README.md`.

@@ -6,3 +6,7 @@ dbt_packages/
 .venv/
 __pycache__/
 .user.yml
+node_modules/
+video/hyperframes/.hyperframes/
+video/hyperframes/renders/
+*.mp4
