@@ -36,7 +36,7 @@ select
     cast(first_name as varchar) as first_name,
     cast(active_months as integer) as active_months,
     cast(lifetime_revenue as decimal(18,2)) as lifetime_revenue,
-    -- rule: high from 50, medium from 20, low above 0, else none
+    -- rule: 'high' from 50 dollars, 'medium' from 20, 'low' above 0, else 'none'
     cast(case
         when lifetime_revenue >= 50 then 'high'
         when lifetime_revenue >= 20 then 'medium'

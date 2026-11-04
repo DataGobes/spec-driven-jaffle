@@ -10,3 +10,4 @@ node_modules/
 video/hyperframes/.hyperframes/
 video/hyperframes/renders/
 *.mp4
+task.md

@@ -27,6 +27,29 @@ pip install -r requirements.txt
 ./demo.sh
 ```
 
+## Run the agent step yourself
+
+The SQL in `models/marts/` was written by a coding agent. To watch that step happen,
+delete it and let your own agent rebuild it from the spec:
+
+```bash
+rm models/marts/dim_customer_value.sql
+python tools/specgen.py status                         # implementation: missing
+python tools/specgen.py task dim_customer_value > task.md
+```
+
+Open the repo in Claude Code, GitHub Copilot agent mode or any other coding agent and
+give it `task.md`. It contains the prompt, the spec and the paths it may write to.
+`AGENTS.md` holds the working agreement most agents read on their own.
+
+Then check its work:
+
+```bash
+DBT_PROFILES_DIR=. dbt build --select +dim_customer_value
+```
+
+Green means the agent's SQL matches the spec. Red tells you exactly where it doesn't.
+
 ## What's in here
 
 | Path | What it is |

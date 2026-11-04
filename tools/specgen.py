@@ -5,6 +5,7 @@ The spec (specs/<model>.yml) is the source of truth. This tool:
   validate  check every spec against specs/_conventions.yml
   generate  write models/<layer>/_<model>.yml: contract, constraints, tests, docs
   status    show which specs have a contract and an implementation
+  task      print the full task for a coding agent to implement one model
 
 The SQL itself is written by a coding agent from the spec
 (see prompts/implement_from_spec.md). The generated contract and tests are
@@ -236,9 +237,27 @@ def cmd_status(only: str | None) -> int:
     return 0
 
 
+def cmd_task(only: str | None) -> int:
+    """Print a self-contained task for a coding agent: prompt, spec and paths."""
+    if not only:
+        raise SpecError("usage: specgen.py task <model>")
+    conv = load_conventions()
+    path, spec = load_specs(only)[0]
+    prompt = (ROOT / "prompts" / "implement_from_spec.md").read_text()
+    layer = spec["layer"]
+    prompt = prompt.replace("<model>", spec["model"]).replace("<layer>", layer)
+    print(prompt.rstrip())
+    print(f"\n## This task\n- Spec: `{path.relative_to(ROOT)}`")
+    print(f"- Contract (read-only): `{contract_path(spec, conv).relative_to(ROOT)}`")
+    print(f"- Write: `{sql_path(spec, conv).relative_to(ROOT)}`")
+    print(f"- Upstream models: {', '.join(spec['depends_on'])}")
+    print(f"\n## The spec\n```yaml\n{path.read_text().rstrip()}\n```")
+    return 0
+
+
 def main(argv: list[str]) -> int:
     commands = {"validate": cmd_validate, "generate": cmd_generate,
-                "status": cmd_status}
+                "status": cmd_status, "task": cmd_task}
     if len(argv) < 2 or argv[1] not in commands:
         print(__doc__)
         return 2
