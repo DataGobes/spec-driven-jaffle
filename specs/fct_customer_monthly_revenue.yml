@@ -33,3 +33,32 @@ columns:
 rules:
   - Orders with status 'returned' or 'return_pending' do not count as revenue.
   - Revenue is the sum of all payments on an order, regardless of payment method.
+
+# Each example verifies one rule: these input rows in, exactly these rows out.
+examples:
+  - name: returned orders do not count
+    rule: 1
+    given:
+      stg_orders:
+        - {order_id: 1, customer_id: 1, order_date: 2018-01-05, status: completed}
+        - {order_id: 2, customer_id: 1, order_date: 2018-01-20, status: returned}
+        - {order_id: 3, customer_id: 1, order_date: 2018-01-25, status: return_pending}
+      stg_payments:
+        - {payment_id: 1, order_id: 1, payment_method: credit_card, amount: 10}
+        - {payment_id: 2, order_id: 2, payment_method: credit_card, amount: 99}
+        - {payment_id: 3, order_id: 3, payment_method: credit_card, amount: 50}
+    expect:
+      - {customer_id: 1, order_month: 2018-01-01, order_count: 1, revenue: 10}
+
+  - name: every payment method counts
+    rule: 2
+    given:
+      stg_orders:
+        - {order_id: 1, customer_id: 2, order_date: 2018-02-03, status: completed}
+        - {order_id: 2, customer_id: 2, order_date: 2018-02-17, status: shipped}
+      stg_payments:
+        - {payment_id: 1, order_id: 1, payment_method: credit_card, amount: 10}
+        - {payment_id: 2, order_id: 1, payment_method: gift_card, amount: 5}
+        - {payment_id: 3, order_id: 2, payment_method: coupon, amount: 7}
+    expect:
+      - {customer_id: 2, order_month: 2018-02-01, order_count: 2, revenue: 22}

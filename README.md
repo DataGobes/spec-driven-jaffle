@@ -50,6 +50,35 @@ DBT_PROFILES_DIR=. dbt build --select +dim_customer_value
 
 Green means the agent's SQL matches the spec. Red tells you exactly where it doesn't.
 
+## Business rules are verified by examples
+
+Contracts and data tests check structure: names, types, keys, ranges, row counts. They
+don't check logic. Remove the "returned orders don't count" filter from the SQL and every
+data test still passes, because the output still looks like valid revenue.
+
+So every rule in a spec gets at least one example: input rows in, expected rows out.
+
+```yaml
+examples:
+  - name: tier boundaries
+    rule: 2          # value_tier is 'high' from 50 dollars, 'medium' from 20, ...
+    given:
+      fct_customer_monthly_revenue:
+        - {customer_id: 1, order_month: 2018-01-01, order_count: 1, revenue: 50}
+        - {customer_id: 2, order_month: 2018-01-01, order_count: 1, revenue: 49.99}
+    expect:
+      - {customer_id: 1, value_tier: high}
+      - {customer_id: 2, value_tier: medium}
+```
+
+`specgen` turns each example into a [dbt unit test](https://docs.getdbt.com/docs/build/unit-tests),
+and the conventions require an example for every rule: a missing one is a warning on a
+draft spec and an error on an enforced one.
+
+Tested on this repo: break the returned-orders rule, or write `> 50` instead of `>= 50`.
+With data tests only, both broken versions pass. With the examples, both fail with a diff
+of the rows that came out wrong.
+
 ## From draft to enforced
 
 Writing a spec blind is finicky: you don't know the data yet, and the data rarely
@@ -104,6 +133,8 @@ the data cleanly. From then on, every test fails the build.
   the tests check grain, references, ranges and row counts on the actual rows.
 - **The agent may not edit the spec to pass a test.** A failing test is either a bug in the
   SQL or a finding about the spec, and a human decides which.
+- **Rules need examples.** A rule in plain language is a promise; an example turned into
+  a unit test is what checks it.
 - **Strictness is earned.** New specs start as drafts that warn, built from profiled data.
   They become enforced only after a clean run on real data.
 
@@ -132,8 +163,12 @@ separate spec format. For a small team that is often enough.
 
 ## Try breaking it
 
-Rename `value_tier` to `tier` in `models/marts/dim_customer_value.sql` and run
-`dbt build`. The enforced contract stops the build and shows the mismatch.
+- Rename `value_tier` to `tier` in `models/marts/dim_customer_value.sql`: the enforced
+  contract stops the build and shows the column mismatch.
+- Change `>= 50` to `> 50` in the same file: the tier-boundary example fails and shows
+  which customer got the wrong tier.
+- Delete the `where status not in (...)` line in `fct_customer_monthly_revenue.sql`: the
+  returned-orders example fails, while every data test would still pass.
 
 ## Credits
 

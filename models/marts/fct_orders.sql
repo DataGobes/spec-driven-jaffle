@@ -21,7 +21,7 @@ select
     cast(orders.customer_id as integer) as customer_id,
     cast(orders.order_date as date) as order_date,
     cast(orders.status as varchar) as status,
-    -- rule: every order has at least one payment, so no default for missing amounts
+    -- rule: an order without payments keeps amount null, so the gap stays visible
     cast(order_amounts.amount as decimal(18,2)) as amount
 from orders
 left join order_amounts using (order_id)

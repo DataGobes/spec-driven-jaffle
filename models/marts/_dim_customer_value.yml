@@ -62,3 +62,87 @@ models:
           - medium
           - low
           - none
+unit_tests:
+- name: dim_customer_value__customers_without_revenue_still_appear
+  description: 'Rule 1: Every customer appears, including customers without revenue.'
+  model: dim_customer_value
+  given:
+  - input: ref('stg_customers')
+    rows:
+    - customer_id: 1
+      first_name: Ann
+    - customer_id: 2
+      first_name: Bob
+  - input: ref('fct_customer_monthly_revenue')
+    rows:
+    - customer_id: 1
+      order_month: 2018-01-01
+      order_count: 1
+      revenue: 30
+    - customer_id: 1
+      order_month: 2018-02-01
+      order_count: 1
+      revenue: 25
+  expect:
+    rows:
+    - customer_id: 1
+      first_name: Ann
+      active_months: 2
+      lifetime_revenue: 55
+      value_tier: high
+    - customer_id: 2
+      first_name: Bob
+      active_months: 0
+      lifetime_revenue: 0
+      value_tier: none
+- name: dim_customer_value__tier_boundaries
+  description: 'Rule 2: value_tier is ''high'' from 50 dollars, ''medium'' from 20, ''low'' above 0, else
+    ''none''.'
+  model: dim_customer_value
+  given:
+  - input: ref('stg_customers')
+    rows:
+    - customer_id: 1
+      first_name: A
+    - customer_id: 2
+      first_name: B
+    - customer_id: 3
+      first_name: C
+    - customer_id: 4
+      first_name: D
+    - customer_id: 5
+      first_name: E
+  - input: ref('fct_customer_monthly_revenue')
+    rows:
+    - customer_id: 1
+      order_month: 2018-01-01
+      order_count: 1
+      revenue: 50
+    - customer_id: 2
+      order_month: 2018-01-01
+      order_count: 1
+      revenue: 49.99
+    - customer_id: 3
+      order_month: 2018-01-01
+      order_count: 1
+      revenue: 20
+    - customer_id: 4
+      order_month: 2018-01-01
+      order_count: 1
+      revenue: 19.99
+    - customer_id: 5
+      order_month: 2018-01-01
+      order_count: 1
+      revenue: 0.01
+  expect:
+    rows:
+    - customer_id: 1
+      value_tier: high
+    - customer_id: 2
+      value_tier: medium
+    - customer_id: 3
+      value_tier: medium
+    - customer_id: 4
+      value_tier: low
+    - customer_id: 5
+      value_tier: low

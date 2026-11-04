@@ -27,3 +27,9 @@ lifecycle:
   # draft: tests report as warnings, contract not enforced, TODO docs allowed.
   # enforced: every test and the contract fail the build.
   statuses: [draft, enforced]
+
+business_rules:
+  # A rule in plain language is a promise; an example is what verifies it.
+  # Each example becomes a dbt unit test: fixed input rows in, expected rows out.
+  # Missing examples are warnings on a draft spec and errors on an enforced one.
+  every_rule_needs_an_example: true

@@ -36,12 +36,45 @@ columns:
   - name: amount
     type: decimal(18,2)
     description: Total of all payments on the order, in dollars.
-    checks: ["amount >= 0"]
+    checks: ["amount >= 0", "amount is not null"]
 
 rules:
   - amount is the sum of all payments on the order, regardless of payment method.
-  - every order has at least one payment, so amount is never null.
+  - an order without payments keeps amount empty (null), so the gap stays visible instead of looking like a free order.
   - an order can be fully discounted: amount 0 is valid (see findings/fct_orders.md).
 
 expectations:
   row_count_equals: stg_orders
+
+# Each example verifies one rule: these input rows in, exactly these rows out.
+# The data check `amount is not null` separately verifies that real orders all have payments.
+examples:
+  - name: every payment method counts
+    rule: 1
+    given:
+      stg_orders:
+        - {order_id: 1, customer_id: 1, order_date: 2018-01-05, status: completed}
+      stg_payments:
+        - {payment_id: 1, order_id: 1, payment_method: credit_card, amount: 10}
+        - {payment_id: 2, order_id: 1, payment_method: coupon, amount: 5}
+    expect:
+      - {order_id: 1, amount: 15}
+
+  - name: an order without payments is not shown as free
+    rule: 2
+    given:
+      stg_orders:
+        - {order_id: 1, customer_id: 1, order_date: 2018-01-05, status: placed}
+      stg_payments: []
+    expect:
+      - {order_id: 1, amount: null}
+
+  - name: a zero payment gives a zero amount
+    rule: 3
+    given:
+      stg_orders:
+        - {order_id: 1, customer_id: 1, order_date: 2018-01-05, status: completed}
+      stg_payments:
+        - {payment_id: 1, order_id: 1, payment_method: credit_card, amount: 0}
+    expect:
+      - {order_id: 1, amount: 0}

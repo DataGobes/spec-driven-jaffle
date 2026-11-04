@@ -41,3 +41,40 @@ rules:
 
 expectations:
   row_count_equals: stg_customers
+
+# Each example verifies one rule: these input rows in, exactly these rows out.
+examples:
+  - name: customers without revenue still appear
+    rule: 1
+    given:
+      stg_customers:
+        - {customer_id: 1, first_name: Ann}
+        - {customer_id: 2, first_name: Bob}
+      fct_customer_monthly_revenue:
+        - {customer_id: 1, order_month: 2018-01-01, order_count: 1, revenue: 30}
+        - {customer_id: 1, order_month: 2018-02-01, order_count: 1, revenue: 25}
+    expect:
+      - {customer_id: 1, first_name: Ann, active_months: 2, lifetime_revenue: 55, value_tier: high}
+      - {customer_id: 2, first_name: Bob, active_months: 0, lifetime_revenue: 0, value_tier: none}
+
+  - name: tier boundaries
+    rule: 2
+    given:
+      stg_customers:
+        - {customer_id: 1, first_name: A}
+        - {customer_id: 2, first_name: B}
+        - {customer_id: 3, first_name: C}
+        - {customer_id: 4, first_name: D}
+        - {customer_id: 5, first_name: E}
+      fct_customer_monthly_revenue:
+        - {customer_id: 1, order_month: 2018-01-01, order_count: 1, revenue: 50}
+        - {customer_id: 2, order_month: 2018-01-01, order_count: 1, revenue: 49.99}
+        - {customer_id: 3, order_month: 2018-01-01, order_count: 1, revenue: 20}
+        - {customer_id: 4, order_month: 2018-01-01, order_count: 1, revenue: 19.99}
+        - {customer_id: 5, order_month: 2018-01-01, order_count: 1, revenue: 0.01}
+    expect:
+      - {customer_id: 1, value_tier: high}
+      - {customer_id: 2, value_tier: medium}
+      - {customer_id: 3, value_tier: medium}
+      - {customer_id: 4, value_tier: low}
+      - {customer_id: 5, value_tier: low}

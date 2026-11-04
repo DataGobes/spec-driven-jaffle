@@ -16,7 +16,8 @@ models:
       spec: specs/fct_orders.yml
       rules:
       - amount is the sum of all payments on the order, regardless of payment method.
-      - every order has at least one payment, so amount is never null.
+      - an order without payments keeps amount empty (null), so the gap stays visible instead of looking
+        like a free order.
       - an order can be fully discounted: amount 0 is valid (see findings/fct_orders.md).
   data_tests:
   - spec_rowcount_equals:
@@ -61,3 +62,68 @@ models:
     - spec_check:
         arguments:
           expression: amount >= 0
+    - spec_check:
+        arguments:
+          expression: amount is not null
+unit_tests:
+- name: fct_orders__every_payment_method_counts
+  description: 'Rule 1: amount is the sum of all payments on the order, regardless of payment method.'
+  model: fct_orders
+  given:
+  - input: ref('stg_orders')
+    rows:
+    - order_id: 1
+      customer_id: 1
+      order_date: 2018-01-05
+      status: completed
+  - input: ref('stg_payments')
+    rows:
+    - payment_id: 1
+      order_id: 1
+      payment_method: credit_card
+      amount: 10
+    - payment_id: 2
+      order_id: 1
+      payment_method: coupon
+      amount: 5
+  expect:
+    rows:
+    - order_id: 1
+      amount: 15
+- name: fct_orders__an_order_without_payments_is_not_shown_as_free
+  description: 'Rule 2: an order without payments keeps amount empty (null), so the gap stays visible
+    instead of looking like a free order.'
+  model: fct_orders
+  given:
+  - input: ref('stg_orders')
+    rows:
+    - order_id: 1
+      customer_id: 1
+      order_date: 2018-01-05
+      status: placed
+  - input: ref('stg_payments')
+    rows: []
+  expect:
+    rows:
+    - order_id: 1
+      amount: null
+- name: fct_orders__a_zero_payment_gives_a_zero_amount
+  description: 'Rule 3: {''an order can be fully discounted'': ''amount 0 is valid (see findings/fct_orders.md).''}'
+  model: fct_orders
+  given:
+  - input: ref('stg_orders')
+    rows:
+    - order_id: 1
+      customer_id: 1
+      order_date: 2018-01-05
+      status: completed
+  - input: ref('stg_payments')
+    rows:
+    - payment_id: 1
+      order_id: 1
+      payment_method: credit_card
+      amount: 0
+  expect:
+    rows:
+    - order_id: 1
+      amount: 0
