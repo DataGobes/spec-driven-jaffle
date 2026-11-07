@@ -37,14 +37,14 @@
         border-radius: 14px; overflow: hidden; box-shadow: 0 18px 40px rgba(0,0,0,.22);
       }
       .wbar {
-        height: 56px; background: var(--win-bar); display: flex; align-items: center;
-        padding: 0 24px; gap: 10px; color: var(--win-muted); font: 500 26px var(--font-display);
+        height: 60px; background: var(--win-bar); display: flex; align-items: center;
+        padding: 0 24px; gap: 10px; color: var(--win-muted); font: 500 28px var(--font-display);
       }
       .wdot { width: 13px; height: 13px; border-radius: 50%; background: #3a3f46; }
       .wtab { margin-left: 14px; color: var(--win-ink); }
       .wtag {
         margin-left: auto; padding: 4px 12px; border-radius: 4px; border: 2px solid currentColor;
-        font: 600 20px var(--font-display); letter-spacing: .06em;
+        font: 600 28px var(--font-display); letter-spacing: .03em;
       }
       .code { padding: 18px 32px; font: 500 30px/44px var(--font-mono); color: var(--win-ink); }
       .ln { position: relative; white-space: pre; height: 44px; }
@@ -66,36 +66,53 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="60.5" data-width="1080" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="62.6" data-width="1080" data-height="1080">
       <div id="ground"></div>
       <div id="hook" data-composition-id="hook" data-composition-src="compositions/hook.html"
-        data-start="0" data-duration="7.4" data-track-index="1" data-track-kind="graphics"
+        data-start="0" data-duration="8.15" data-track-index="1" data-track-kind="graphics"
         data-width="1080" data-height="1080"></div>
       <div id="draft" data-composition-id="draft" data-composition-src="compositions/draft.html"
-        data-start="7.4" data-duration="8.2" data-track-index="1" data-track-kind="graphics"
+        data-start="8.15" data-duration="10.1" data-track-index="1" data-track-kind="graphics"
         data-width="1080" data-height="1080"></div>
       <div id="warn" data-composition-id="warn" data-composition-src="compositions/warn.html"
-        data-start="15.6" data-duration="6.8" data-track-index="1" data-track-kind="graphics"
+        data-start="18.25" data-duration="6.8" data-track-index="1" data-track-kind="graphics"
         data-width="1080" data-height="1080"></div>
       <div id="decide" data-composition-id="decide" data-composition-src="compositions/decide.html"
-        data-start="22.4" data-duration="9.4" data-track-index="1" data-track-kind="graphics"
+        data-start="25.05" data-duration="8.35" data-track-index="1" data-track-kind="graphics"
         data-width="1080" data-height="1080"></div>
       <div id="structure" data-composition-id="structure" data-composition-src="compositions/structure.html"
-        data-start="31.8" data-duration="10.3" data-track-index="1" data-track-kind="graphics"
+        data-start="33.4" data-duration="10.4" data-track-index="1" data-track-kind="graphics"
         data-width="1080" data-height="1080"></div>
       <div id="behaviour" data-composition-id="behaviour" data-composition-src="compositions/behaviour.html"
-        data-start="42.1" data-duration="11.0" data-track-index="1" data-track-kind="graphics"
+        data-start="43.8" data-duration="11.85" data-track-index="1" data-track-kind="graphics"
         data-width="1080" data-height="1080"></div>
       <div id="close" data-composition-id="close" data-composition-src="compositions/close.html"
-        data-start="53.1" data-duration="7.4" data-track-index="1" data-track-kind="graphics"
+        data-start="55.65" data-duration="6.95" data-track-index="1" data-track-kind="graphics"
         data-width="1080" data-height="1080"></div>
       <div id="chapter" data-composition-id="chapter" data-composition-src="compositions/chapter.html"
-        data-start="7.4" data-duration="45.7" data-track-index="2" data-track-kind="graphics"
+        data-start="8.15" data-duration="47.5" data-track-index="2" data-track-kind="graphics"
         data-width="1080" data-height="1080"></div>
       <div id="captions" data-composition-id="captions" data-composition-src="compositions/captions.html"
-        data-start="0" data-duration="60.5" data-track-index="3" data-track-kind="captions"
+        data-start="0" data-duration="62.6" data-track-index="3" data-track-kind="captions"
         data-width="1080" data-height="1080"></div>
-      <!-- AUDIO -->
+      <audio id="vo1" class="clip" src="assets/audio/vo1.mp3" data-start="0.35" data-duration="7.44" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo2" class="clip" src="assets/audio/vo2.mp3" data-start="8.45" data-duration="9.46" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo3" class="clip" src="assets/audio/vo3.mp3" data-start="18.55" data-duration="6.17" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo4" class="clip" src="assets/audio/vo4.mp3" data-start="25.35" data-duration="7.61" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo5" class="clip" src="assets/audio/vo5.mp3" data-start="33.7" data-duration="9.7" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo6" class="clip" src="assets/audio/vo6.mp3" data-start="44.1" data-duration="11.14" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo7" class="clip" src="assets/audio/vo7.mp3" data-start="55.95" data-duration="4.8" data-track-index="10" data-volume="1"></audio>
+      <audio id="music" class="clip" src="assets/audio/music.mp3" data-start="0" data-duration="62.6" data-media-start="6" data-track-index="11" data-volume="0.14" data-fade-in="0.4" data-fade-out="1.5"></audio>
+      <audio id="sx-wh1" class="clip" src="assets/audio/whoosh1.mp3" data-start="8.17" data-duration="1.01" data-track-index="12" data-volume="0.5"></audio>
+      <audio id="sx-wh2" class="clip" src="assets/audio/whoosh2.mp3" data-start="33.42" data-duration="1.01" data-track-index="12" data-volume="0.5"></audio>
+      <audio id="sx-wh3" class="clip" src="assets/audio/whoosh3.mp3" data-start="55.67" data-duration="1.01" data-track-index="12" data-volume="0.5"></audio>
+      <audio id="sx-key1" class="clip" src="assets/audio/keys1.mp3" data-start="11.05" data-media-start="0.1" data-duration="1.0" data-track-index="12" data-volume="0.45"></audio>
+      <audio id="sx-key2" class="clip" src="assets/audio/keys2.mp3" data-start="18.55" data-media-start="0" data-duration="0.7" data-track-index="12" data-volume="0.45"></audio>
+      <audio id="sx-key3" class="clip" src="assets/audio/keys1.mp3" data-start="30.65" data-media-start="0.6" data-duration="0.6" data-track-index="12" data-volume="0.45"></audio>
+      <audio id="sx-pop1" class="clip" src="assets/audio/pop2.mp3" data-start="23.75" data-duration="0.48" data-track-index="12" data-volume="0.55"></audio>
+      <audio id="sx-pop2" class="clip" src="assets/audio/pop2.mp3" data-start="28.8" data-duration="0.48" data-track-index="12" data-volume="0.55"></audio>
+      <audio id="sx-pop3" class="clip" src="assets/audio/pop2.mp3" data-start="53.7" data-duration="0.48" data-track-index="12" data-volume="0.55"></audio>
+      <audio id="sx-riser" class="clip" src="assets/audio/riser1.mp3" data-start="51.0" data-duration="3.48" data-track-index="12" data-volume="0.6"></audio>
     </div>
     <script>
       window.__timelines = window.__timelines || {};

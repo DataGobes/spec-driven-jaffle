@@ -1,10 +1,13 @@
-# The explainer video
+# The explainer videos
 
-A 60-second square video of the demo, made with [HyperFrames](https://hyperframes.heygen.com)
+- `hyperframes/`: part 1, the spec → contract → SQL → verify loop.
+- `part2/`: part 2, specs drafted from data (draft → enforced) and rule examples as dbt unit tests.
+
+Each is a 60-second square video of the demo, made with [HyperFrames](https://hyperframes.heygen.com)
 (HTML rendered to MP4). Voice, music and sound effects were generated with ElevenLabs.
 
 ```bash
-cd video/hyperframes
+cd video/hyperframes   # or video/part2
 npx hyperframes preview          # edit and scrub in the browser
 npx hyperframes render -o out.mp4
 ```

@@ -3,13 +3,13 @@
     #root { position: absolute; inset: 0; font-family: var(--font-display); }
     #h-part {
       position: absolute; left: 60px; top: 52px; padding: 8px 16px; border-radius: 4px;
-      background: var(--color-ink); color: var(--color-ground); font: 600 26px var(--font-display); letter-spacing: .02em;
+      background: var(--color-ink); color: var(--color-ground); font: 600 28px var(--font-display); letter-spacing: .02em;
     }
     #h-spec { top: 128px; }
     #h-rows { top: 330px; }
     .h-row { display: flex; position: relative; height: 56px; align-items: center; padding: 0 32px; font: 500 30px var(--font-mono); color: var(--win-ink); }
     .h-row > span { position: relative; }
-    .h-head { color: var(--win-muted); font: 600 24px var(--font-display); letter-spacing: .04em; height: 52px; }
+    .h-head { color: var(--win-muted); font: 600 28px var(--font-display); letter-spacing: .04em; height: 52px; }
     .h-c1 { width: 200px; } .h-c2 { width: 260px; } .h-c3 { width: 270px; } .h-c4 { flex: 1; text-align: right; }
     .h-row .band { left: 0; right: 0; }
     #h-q { position: absolute; left: 60px; top: 760px; width: 960px; font: 700 76px/1.1 var(--font-display); letter-spacing: -0.015em; color: var(--color-ink); }
@@ -18,7 +18,7 @@
     #h-x { position: absolute; right: 32px; top: 0; height: 44px; display: flex; align-items: center; opacity: 0; font: 700 30px var(--font-display); }
   </style>
   <div id="root" data-composition-id="hook" data-width="1080" data-height="1080">
-    <div id="h-stage" class="clip" data-start="0" data-duration="7.4">
+    <div id="h-stage" class="clip" data-start="0" data-duration="8.15">
       <div id="h-part">PART 2</div>
       <div class="w" id="h-spec">
         <div class="wbar"><span class="wdot"></span><span class="wdot"></span><span class="wdot"></span><span class="wtab">specs/fct_orders.yml</span></div>
@@ -40,7 +40,7 @@
   </div>
   <script>
     // cue times (s, scene-relative): retimed from the measured voice
-    const C = { spec: 0.4, rule: 1.6, q: [2.9, 3.2, 3.45], row: 3.4, done: 4.6, amt: 5.6, end: 7.15 };
+    const C = { spec: 0.4, rule: 1.5, q: [3.43, 3.78, 4.18], row: 3.6, done: 5.6, amt: 6.45, end: 7.9 };
     const tl = gsap.timeline({ paused: true });
     tl.fromTo("#h-spec", { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0.05);
     tl.fromTo("#h-rows", { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0.25);

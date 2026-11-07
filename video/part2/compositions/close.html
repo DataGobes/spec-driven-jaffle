@@ -12,7 +12,7 @@
     }
   </style>
   <div id="root" data-composition-id="close" data-width="1080" data-height="1080">
-    <div id="cl-stage" class="clip" data-start="0" data-duration="7.4">
+    <div id="cl-stage" class="clip" data-start="0" data-duration="6.95">
       <div class="cl-line" id="cl-1"><span>Start</span><span>from</span><span>the</span><span class="cl-acc">data.</span></div>
       <div class="cl-line" id="cl-2"><span>Verify</span><span>the</span><span class="cl-acc">behaviour.</span></div>
       <div id="cl-tag">Part 2 is in the repo</div>
@@ -20,7 +20,7 @@
     </div>
   </div>
   <script>
-    const C = { l1: [0.3, 0.6, 0.8, 0.95], l2: [1.7, 2.1, 2.3], tag: 3.4, repo: 3.9 };
+    const C = { l1: [0.32, 0.62, 0.85, 1.0], l2: [1.88, 2.3, 2.5], tag: 3.6, repo: 4.1 };
     const tl = gsap.timeline({ paused: true });
     gsap.utils.toArray("#cl-1 span").forEach((el, i) => {
       const to = el.classList.contains("cl-acc") ? "#8f5410" : "#1a1c1f";

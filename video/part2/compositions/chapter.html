@@ -2,18 +2,18 @@
   <style>
     #root { position: absolute; inset: 0; font-family: var(--font-display); }
     .ch { position: absolute; left: 60px; top: 52px; display: flex; align-items: center; gap: 14px; opacity: 0; }
-    .ch-n { padding: 8px 16px; border-radius: 4px; background: var(--color-ink); color: var(--color-ground); font: 600 26px var(--font-display); }
+    .ch-n { padding: 8px 16px; border-radius: 4px; background: var(--color-ink); color: var(--color-ground); font: 600 28px var(--font-display); }
     .ch-t { font: 600 28px var(--font-display); color: var(--color-ink); }
   </style>
   <div id="root" data-composition-id="chapter" data-width="1080" data-height="1080">
-    <div id="ch-stage" class="clip" data-start="0" data-duration="45.7">
+    <div id="ch-stage" class="clip" data-start="0" data-duration="47.5">
       <div class="ch" id="ch-1"><span class="ch-n">Extension 1</span><span class="ch-t">Start from the data</span></div>
       <div class="ch" id="ch-2"><span class="ch-n">Extension 2</span><span class="ch-t">Verify behaviour</span></div>
     </div>
   </div>
   <script>
     // switch = start of the structure scene minus start of this chapter rail
-    const C = { switch: 24.4, end: 45.45 };
+    const C = { switch: 25.25, end: 47.25 };
     const tl = gsap.timeline({ paused: true });
     tl.fromTo("#ch-1", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.3, ease: "power2.out" }, 0.1);
     tl.fromTo("#ch-1", { opacity: 1 }, { opacity: 0, duration: 0.2, ease: "power3.in", immediateRender: false }, C.switch - 0.25);

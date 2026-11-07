@@ -2,25 +2,29 @@
 import json, html
 words = json.load(open("words.json"))
 # on-screen type already says these lines: no captions there
-skip = lambda w: (w["line"] == "vo1" and w["start"] >= 4.6) or w["line"] == "vo7"
+# on-screen type already says these: "Order 65 disagreed" on the hook, the whole closing card
+skip = lambda w: (w["line"] == "vo1" and 3.3 <= w["start"] < 5.2) or w["line"] == "vo7"
 import math
 phrases, cur = [], []
 for w in words:
     if skip(w):
         if cur: phrases.append(cur); cur = []
         continue
-    if cur and (cur[-1]["line"] != w["line"] or w["start"] - cur[-1]["end"] > 0.3):
+    if cur and (cur[-1]["line"] != w["line"] or w["start"] - cur[-1]["end"] > 0.1):
         phrases.append(cur); cur = []
     cur.append(w)
     if w["text"][-1] in ".?:":
         phrases.append(cur); cur = []
 if cur: phrases.append(cur)
-merged = []
-for ph in phrases:
-    k = math.ceil(len(ph) / 5)
-    size = math.ceil(len(ph) / k)
-    for j in range(0, len(ph), size):
-        merged.append(ph[j:j + size])
+def chunks(ph):
+    """At most 5 words per caption; split long phrases at a comma, else in the middle."""
+    if len(ph) <= 5:
+        return [ph]
+    commas = [i + 1 for i, w in enumerate(ph[:-1]) if w["text"].endswith(",")]
+    mid = len(ph) / 2
+    cut = min(commas, key=lambda i: abs(i - mid)) if commas else math.ceil(mid)
+    return chunks(ph[:cut]) + chunks(ph[cut:])
+merged = [c for ph in phrases for c in chunks(ph)]
 rows, js = [], []
 for i, g in enumerate(merged):
     start = g[0]["start"] - 0.05
@@ -38,7 +42,7 @@ out = f'''<template>
     }}
   </style>
   <div id="root" data-composition-id="captions" data-width="1080" data-height="1080">
-    <div id="cp-stage" class="clip" data-start="0" data-duration="61.6" data-layout-allow-caption-zone>
+    <div id="cp-stage" class="clip" data-start="0" data-duration="62.6" data-layout-allow-caption-zone>
 {chr(10).join(rows)}
     </div>
   </div>

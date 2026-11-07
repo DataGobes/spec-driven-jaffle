@@ -7,11 +7,11 @@
     #bh-term .code { font-size: 28px; }
     .bh-diff { display: flex; gap: 24px; padding: 4px 32px 22px; }
     .bh-cell { flex: 1; border-radius: 8px; background: #1d2126; padding: 12px 18px; opacity: 0; }
-    .bh-k { font: 600 22px var(--font-display); color: var(--win-muted); letter-spacing: .04em; }
+    .bh-k { font: 600 28px var(--font-display); color: var(--win-muted); letter-spacing: .04em; }
     .bh-v { margin-top: 4px; font: 600 40px var(--font-mono); color: var(--win-ink); white-space: pre; }
   </style>
   <div id="root" data-composition-id="behaviour" data-width="1080" data-height="1080">
-    <div id="bh-stage" class="clip" data-start="0" data-duration="11.0">
+    <div id="bh-stage" class="clip" data-start="0" data-duration="11.85">
       <div class="w" id="bh-ex">
         <div class="wbar"><span class="wdot"></span><span class="wdot"></span><span class="wdot"></span><span class="wtab">spec · rule 1 example</span><span class="wtag">UNIT TEST</span></div>
         <div class="code">
@@ -35,7 +35,7 @@
     </div>
   </div>
   <script>
-    const C = { ex: 0.1, given: 2.6, expect: 3.6, term: 5.4, fail: 6.4, diff: 7.3, end: 10.75 };
+    const C = { ex: 0.1, given: 3.37, expect: 4.25, term: 5.3, fail: 9.2, diff: 9.9, end: 11.6 };
     const tl = gsap.timeline({ paused: true });
     tl.fromTo("#bh-ex", { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, C.ex);
     ["#bh-g", "#bh-g2", "#bh-g3"].forEach((s, i) =>

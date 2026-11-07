@@ -3,17 +3,17 @@
     #root { position: absolute; inset: 0; font-family: var(--font-display); color: var(--color-ink); }
     #st-layers { position: absolute; left: 60px; top: 128px; width: 960px; display: flex; gap: 18px; }
     .st-l { flex: 1; border-radius: 12px; padding: 20px 26px; border: 3px solid #a9a397; background: #f1eee8; opacity: 0; }
-    .st-lbl { font: 600 24px var(--font-display); letter-spacing: .05em; color: #5f5a52; }
+    .st-lbl { font: 600 28px var(--font-display); letter-spacing: .05em; color: #5f5a52; }
     .st-val { margin-top: 6px; font: 700 44px/1.1 var(--font-display); letter-spacing: -0.01em; }
-    .st-sub { margin-top: 6px; font: 500 24px var(--font-display); color: #4a463f; }
+    .st-sub { margin-top: 6px; font: 500 28px var(--font-display); color: #4a463f; }
     #st-beh { border-style: dashed; }
     #st-sql { top: 370px; }
-    #st-tests { top: 806px; }
+    #st-tests { top: 690px; }
     #st-rule { position: relative; }
     #st-strike { position: absolute; left: -6px; right: -6px; top: 50%; height: 4px; background: var(--color-fail); transform-origin: left center; transform: scaleX(0); }
   </style>
   <div id="root" data-composition-id="structure" data-width="1080" data-height="1080">
-    <div id="st-stage" class="clip" data-start="0" data-duration="10.3">
+    <div id="st-stage" class="clip" data-start="0" data-duration="10.4">
       <div id="st-layers">
         <div class="st-l" id="st-str"><div class="st-lbl">LAYER 1</div><div class="st-val">Structure</div><div class="st-sub">contract · data tests</div></div>
         <div class="st-l" id="st-beh"><div class="st-lbl">LAYER 2</div><div class="st-val">Behaviour</div><div class="st-sub">does the logic hold?</div></div>
@@ -34,7 +34,7 @@
     </div>
   </div>
   <script>
-    const C = { str: 0.3, beh: 2.4, sql: 3.6, del: 5.2, tests: 6.9, pass: 7.6, end: 10.05 };
+    const C = { str: 0.4, beh: 4.3, sql: 4.55, del: 6.0, tests: 7.4, pass: 8.3, end: 10.15 };
     const tl = gsap.timeline({ paused: true });
     tl.fromTo("#st-str", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "expo.out" }, C.str);
     tl.fromTo("#st-beh", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "expo.out" }, C.beh);

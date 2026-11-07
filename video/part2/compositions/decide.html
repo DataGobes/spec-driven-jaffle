@@ -2,7 +2,7 @@
   <style>
     #root { position: absolute; inset: 0; font-family: var(--font-display); }
     #dc-find { top: 128px; }
-    #dc-find .wtag { color: var(--color-fail); }
+    #dc-find .wtag { color: #ff8a73; }
     #dc-spec { top: 470px; }
     #dc-spec .wtag { color: var(--color-spec); }
     #dc-term { top: 730px; }
@@ -10,13 +10,13 @@
     #dc-old { position: relative; }
     #dc-strike { position: absolute; left: 0; right: 0; top: 50%; height: 4px; background: var(--color-fail); transform-origin: left center; transform: scaleX(0); }
     #dc-stamp {
-      position: absolute; right: 90px; top: 380px; padding: 12px 22px; border: 4px solid #2e8a50; border-radius: 6px;
+      position: absolute; z-index: 5; right: 90px; top: 366px; padding: 12px 22px; border: 4px solid #2e8a50; border-radius: 6px;
       background: rgba(220,216,207,.97); color: #1d5c35; font: 700 32px/1.15 var(--font-display); transform: rotate(-5deg); opacity: 0;
     }
-    #dc-stamp small { display: block; font: 600 22px var(--font-display); color: #234d33; }
+    #dc-stamp small { display: block; font: 600 28px var(--font-display); color: #234d33; }
   </style>
   <div id="root" data-composition-id="decide" data-width="1080" data-height="1080">
-    <div id="dc-stage" class="clip" data-start="0" data-duration="9.4" data-layout-allow-overlap>
+    <div id="dc-stage" class="clip" data-start="0" data-duration="8.35" data-layout-allow-overlap>
       <div class="w" id="dc-find">
         <div class="wbar"><span class="wdot"></span><span class="wdot"></span><span class="wdot"></span><span class="wtab">findings/fct_orders.md</span><span class="wtag">BY THE AGENT</span></div>
         <div class="code">
@@ -43,7 +43,7 @@
     </div>
   </div>
   <script>
-    const C = { find: 0.15, doc: 1.6, human: 3.0, change: 3.8, promote: 5.3, ok: 6.6, end: 9.15 };
+    const C = { find: 0.15, doc: 2.0, human: 3.75, change: 4.6, promote: 5.3, ok: 6.35, end: 8.1 };
     const tl = gsap.timeline({ paused: true });
     tl.fromTo("#dc-find", { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, C.find);
     ["#dc-f1", "#dc-f2", "#dc-f3", "#dc-f4"].forEach((s, i) =>

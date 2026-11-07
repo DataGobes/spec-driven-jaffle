@@ -7,7 +7,7 @@
     #d-spec .wtag { color: var(--color-contract); }
   </style>
   <div id="root" data-composition-id="draft" data-width="1080" data-height="1080">
-    <div id="d-stage" class="clip" data-start="0" data-duration="8.2">
+    <div id="d-stage" class="clip" data-start="0" data-duration="10.1">
       <div class="w" id="d-term">
         <div class="wbar"><span class="wdot"></span><span class="wdot"></span><span class="wdot"></span><span class="wtab">terminal</span></div>
         <div class="code">
@@ -31,7 +31,7 @@
     </div>
   </div>
   <script>
-    const C = { cmd: 0.5, out: 2.4, cols: 4.5, types: 5.1, grain: 5.6, acc: 6.3, end: 7.95 };
+    const C = { cmd: 2.9, out: 4.6, cols: 6.45, types: 6.95, grain: 7.45, acc: 8.25, end: 9.85 };
     const tl = gsap.timeline({ paused: true });
     tl.fromTo("#d-term", { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0.05);
     tl.fromTo("#d-cmd", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1.0, ease: "none" }, C.cmd);

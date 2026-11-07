@@ -1,0 +1,818 @@
+[
+ {
+  "line": "vo1",
+  "text": "My",
+  "start": 0.4,
+  "end": 0.61
+ },
+ {
+  "line": "vo1",
+  "text": "spec",
+  "start": 0.61,
+  "end": 0.96
+ },
+ {
+  "line": "vo1",
+  "text": "said",
+  "start": 0.96,
+  "end": 1.31
+ },
+ {
+  "line": "vo1",
+  "text": "every",
+  "start": 1.45,
+  "end": 1.8
+ },
+ {
+  "line": "vo1",
+  "text": "order",
+  "start": 1.8,
+  "end": 2.15
+ },
+ {
+  "line": "vo1",
+  "text": "costs",
+  "start": 2.15,
+  "end": 2.5
+ },
+ {
+  "line": "vo1",
+  "text": "money.",
+  "start": 2.5,
+  "end": 2.85
+ },
+ {
+  "line": "vo1",
+  "text": "Order",
+  "start": 3.43,
+  "end": 3.86
+ },
+ {
+  "line": "vo1",
+  "text": "65",
+  "start": 3.86,
+  "end": 4.36
+ },
+ {
+  "line": "vo1",
+  "text": "disagreed:",
+  "start": 4.36,
+  "end": 5.07
+ },
+ {
+  "line": "vo1",
+  "text": "completed,",
+  "start": 5.54,
+  "end": 6.08
+ },
+ {
+  "line": "vo1",
+  "text": "paid",
+  "start": 6.4,
+  "end": 6.74
+ },
+ {
+  "line": "vo1",
+  "text": "zero",
+  "start": 6.74,
+  "end": 7.07
+ },
+ {
+  "line": "vo1",
+  "text": "dollars.",
+  "start": 7.07,
+  "end": 7.6
+ },
+ {
+  "line": "vo2",
+  "text": "Specs",
+  "start": 8.5,
+  "end": 8.88
+ },
+ {
+  "line": "vo2",
+  "text": "now",
+  "start": 8.88,
+  "end": 9.13
+ },
+ {
+  "line": "vo2",
+  "text": "start",
+  "start": 9.13,
+  "end": 9.51
+ },
+ {
+  "line": "vo2",
+  "text": "from",
+  "start": 9.51,
+  "end": 9.82
+ },
+ {
+  "line": "vo2",
+  "text": "the",
+  "start": 9.82,
+  "end": 10.07
+ },
+ {
+  "line": "vo2",
+  "text": "data.",
+  "start": 10.07,
+  "end": 10.39
+ },
+ {
+  "line": "vo2",
+  "text": "One",
+  "start": 11.07,
+  "end": 11.31
+ },
+ {
+  "line": "vo2",
+  "text": "command",
+  "start": 11.31,
+  "end": 11.77
+ },
+ {
+  "line": "vo2",
+  "text": "profiles",
+  "start": 11.77,
+  "end": 12.28
+ },
+ {
+  "line": "vo2",
+  "text": "the",
+  "start": 12.29,
+  "end": 12.52
+ },
+ {
+  "line": "vo2",
+  "text": "table",
+  "start": 12.52,
+  "end": 12.87
+ },
+ {
+  "line": "vo2",
+  "text": "and",
+  "start": 12.87,
+  "end": 13.11
+ },
+ {
+  "line": "vo2",
+  "text": "drafts",
+  "start": 13.11,
+  "end": 13.51
+ },
+ {
+  "line": "vo2",
+  "text": "the",
+  "start": 13.51,
+  "end": 13.75
+ },
+ {
+  "line": "vo2",
+  "text": "spec:",
+  "start": 13.75,
+  "end": 14.04
+ },
+ {
+  "line": "vo2",
+  "text": "columns,",
+  "start": 14.6,
+  "end": 15.12
+ },
+ {
+  "line": "vo2",
+  "text": "types,",
+  "start": 15.12,
+  "end": 15.51
+ },
+ {
+  "line": "vo2",
+  "text": "grain",
+  "start": 15.51,
+  "end": 15.9
+ },
+ {
+  "line": "vo2",
+  "text": "and",
+  "start": 16.03,
+  "end": 16.41
+ },
+ {
+  "line": "vo2",
+  "text": "allowed",
+  "start": 16.41,
+  "end": 17.15
+ },
+ {
+  "line": "vo2",
+  "text": "values.",
+  "start": 17.15,
+  "end": 17.8
+ },
+ {
+  "line": "vo3",
+  "text": "A",
+  "start": 18.6,
+  "end": 18.77
+ },
+ {
+  "line": "vo3",
+  "text": "draft",
+  "start": 18.77,
+  "end": 19.25
+ },
+ {
+  "line": "vo3",
+  "text": "spec",
+  "start": 19.25,
+  "end": 19.66
+ },
+ {
+  "line": "vo3",
+  "text": "only",
+  "start": 19.66,
+  "end": 20.06
+ },
+ {
+  "line": "vo3",
+  "text": "warns.",
+  "start": 20.06,
+  "end": 20.54
+ },
+ {
+  "line": "vo3",
+  "text": "The",
+  "start": 20.96,
+  "end": 21.21
+ },
+ {
+  "line": "vo3",
+  "text": "model",
+  "start": 21.21,
+  "end": 21.57
+ },
+ {
+  "line": "vo3",
+  "text": "meets",
+  "start": 21.57,
+  "end": 21.94
+ },
+ {
+  "line": "vo3",
+  "text": "real",
+  "start": 21.94,
+  "end": 22.24
+ },
+ {
+  "line": "vo3",
+  "text": "data",
+  "start": 22.24,
+  "end": 22.55
+ },
+ {
+  "line": "vo3",
+  "text": "first,",
+  "start": 22.55,
+  "end": 22.91
+ },
+ {
+  "line": "vo3",
+  "text": "and",
+  "start": 23.09,
+  "end": 23.31
+ },
+ {
+  "line": "vo3",
+  "text": "the",
+  "start": 23.31,
+  "end": 23.53
+ },
+ {
+  "line": "vo3",
+  "text": "build",
+  "start": 23.53,
+  "end": 23.85
+ },
+ {
+  "line": "vo3",
+  "text": "stays",
+  "start": 23.85,
+  "end": 24.17
+ },
+ {
+  "line": "vo3",
+  "text": "green.",
+  "start": 24.17,
+  "end": 24.49
+ },
+ {
+  "line": "vo4",
+  "text": "When",
+  "start": 25.4,
+  "end": 25.7
+ },
+ {
+  "line": "vo4",
+  "text": "the",
+  "start": 25.7,
+  "end": 25.95
+ },
+ {
+  "line": "vo4",
+  "text": "data",
+  "start": 25.95,
+  "end": 26.25
+ },
+ {
+  "line": "vo4",
+  "text": "disagrees,",
+  "start": 26.25,
+  "end": 26.84
+ },
+ {
+  "line": "vo4",
+  "text": "the",
+  "start": 27.05,
+  "end": 27.26
+ },
+ {
+  "line": "vo4",
+  "text": "agent",
+  "start": 27.26,
+  "end": 27.57
+ },
+ {
+  "line": "vo4",
+  "text": "documents",
+  "start": 27.57,
+  "end": 28.09
+ },
+ {
+  "line": "vo4",
+  "text": "it.",
+  "start": 28.09,
+  "end": 28.25
+ },
+ {
+  "line": "vo4",
+  "text": "A",
+  "start": 28.77,
+  "end": 29.01
+ },
+ {
+  "line": "vo4",
+  "text": "human",
+  "start": 29.01,
+  "end": 29.67
+ },
+ {
+  "line": "vo4",
+  "text": "decides,",
+  "start": 29.67,
+  "end": 30.55
+ },
+ {
+  "line": "vo4",
+  "text": "and",
+  "start": 30.55,
+  "end": 30.76
+ },
+ {
+  "line": "vo4",
+  "text": "only",
+  "start": 30.76,
+  "end": 31.01
+ },
+ {
+  "line": "vo4",
+  "text": "a",
+  "start": 31.01,
+  "end": 31.12
+ },
+ {
+  "line": "vo4",
+  "text": "clean",
+  "start": 31.12,
+  "end": 31.42
+ },
+ {
+  "line": "vo4",
+  "text": "run",
+  "start": 31.42,
+  "end": 31.63
+ },
+ {
+  "line": "vo4",
+  "text": "makes",
+  "start": 31.63,
+  "end": 31.93
+ },
+ {
+  "line": "vo4",
+  "text": "the",
+  "start": 31.93,
+  "end": 32.14
+ },
+ {
+  "line": "vo4",
+  "text": "spec",
+  "start": 32.14,
+  "end": 32.4
+ },
+ {
+  "line": "vo4",
+  "text": "strict.",
+  "start": 32.4,
+  "end": 32.75
+ },
+ {
+  "line": "vo5",
+  "text": "Contracts",
+  "start": 33.75,
+  "end": 34.37
+ },
+ {
+  "line": "vo5",
+  "text": "and",
+  "start": 34.37,
+  "end": 34.62
+ },
+ {
+  "line": "vo5",
+  "text": "data",
+  "start": 34.62,
+  "end": 34.94
+ },
+ {
+  "line": "vo5",
+  "text": "tests",
+  "start": 34.94,
+  "end": 35.32
+ },
+ {
+  "line": "vo5",
+  "text": "check",
+  "start": 35.32,
+  "end": 35.69
+ },
+ {
+  "line": "vo5",
+  "text": "structure.",
+  "start": 35.69,
+  "end": 36.31
+ },
+ {
+  "line": "vo5",
+  "text": "The",
+  "start": 36.93,
+  "end": 37.14
+ },
+ {
+  "line": "vo5",
+  "text": "next",
+  "start": 37.14,
+  "end": 37.39
+ },
+ {
+  "line": "vo5",
+  "text": "layer",
+  "start": 37.39,
+  "end": 37.7
+ },
+ {
+  "line": "vo5",
+  "text": "checks",
+  "start": 37.7,
+  "end": 38.05
+ },
+ {
+  "line": "vo5",
+  "text": "behaviour.",
+  "start": 38.05,
+  "end": 38.55
+ },
+ {
+  "line": "vo5",
+  "text": "Delete",
+  "start": 39.27,
+  "end": 39.66
+ },
+ {
+  "line": "vo5",
+  "text": "a",
+  "start": 39.66,
+  "end": 39.79
+ },
+ {
+  "line": "vo5",
+  "text": "business",
+  "start": 39.79,
+  "end": 40.29
+ },
+ {
+  "line": "vo5",
+  "text": "rule",
+  "start": 40.29,
+  "end": 40.58
+ },
+ {
+  "line": "vo5",
+  "text": "from",
+  "start": 40.58,
+  "end": 40.86
+ },
+ {
+  "line": "vo5",
+  "text": "the",
+  "start": 40.86,
+  "end": 41.09
+ },
+ {
+  "line": "vo5",
+  "text": "SQL,",
+  "start": 41.09,
+  "end": 41.31
+ },
+ {
+  "line": "vo5",
+  "text": "and",
+  "start": 41.5,
+  "end": 41.68
+ },
+ {
+  "line": "vo5",
+  "text": "the",
+  "start": 41.68,
+  "end": 41.87
+ },
+ {
+  "line": "vo5",
+  "text": "structure",
+  "start": 41.87,
+  "end": 42.31
+ },
+ {
+  "line": "vo5",
+  "text": "still",
+  "start": 42.31,
+  "end": 42.58
+ },
+ {
+  "line": "vo5",
+  "text": "looks",
+  "start": 42.58,
+  "end": 42.85
+ },
+ {
+  "line": "vo5",
+  "text": "fine.",
+  "start": 42.85,
+  "end": 43.08
+ },
+ {
+  "line": "vo6",
+  "text": "So",
+  "start": 44.15,
+  "end": 44.34
+ },
+ {
+  "line": "vo6",
+  "text": "every",
+  "start": 44.34,
+  "end": 44.71
+ },
+ {
+  "line": "vo6",
+  "text": "rule",
+  "start": 44.71,
+  "end": 45.02
+ },
+ {
+  "line": "vo6",
+  "text": "in",
+  "start": 45.02,
+  "end": 45.21
+ },
+ {
+  "line": "vo6",
+  "text": "the",
+  "start": 45.21,
+  "end": 45.46
+ },
+ {
+  "line": "vo6",
+  "text": "spec",
+  "start": 45.46,
+  "end": 45.77
+ },
+ {
+  "line": "vo6",
+  "text": "carries",
+  "start": 45.77,
+  "end": 46.25
+ },
+ {
+  "line": "vo6",
+  "text": "examples:",
+  "start": 46.25,
+  "end": 46.8
+ },
+ {
+  "line": "vo6",
+  "text": "rows",
+  "start": 47.17,
+  "end": 47.62
+ },
+ {
+  "line": "vo6",
+  "text": "in,",
+  "start": 47.62,
+  "end": 47.9
+ },
+ {
+  "line": "vo6",
+  "text": "rows",
+  "start": 48.05,
+  "end": 48.42
+ },
+ {
+  "line": "vo6",
+  "text": "out,",
+  "start": 48.42,
+  "end": 48.72
+ },
+ {
+  "line": "vo6",
+  "text": "run",
+  "start": 49.11,
+  "end": 49.43
+ },
+ {
+  "line": "vo6",
+  "text": "as",
+  "start": 49.43,
+  "end": 49.68
+ },
+ {
+  "line": "vo6",
+  "text": "dbt",
+  "start": 49.68,
+  "end": 50.06
+ },
+ {
+  "line": "vo6",
+  "text": "unit",
+  "start": 50.06,
+  "end": 50.46
+ },
+ {
+  "line": "vo6",
+  "text": "tests.",
+  "start": 50.46,
+  "end": 50.94
+ },
+ {
+  "line": "vo6",
+  "text": "Delete",
+  "start": 51.47,
+  "end": 51.84
+ },
+ {
+  "line": "vo6",
+  "text": "the",
+  "start": 51.84,
+  "end": 52.06
+ },
+ {
+  "line": "vo6",
+  "text": "rule,",
+  "start": 52.06,
+  "end": 52.33
+ },
+ {
+  "line": "vo6",
+  "text": "and",
+  "start": 52.33,
+  "end": 52.55
+ },
+ {
+  "line": "vo6",
+  "text": "the",
+  "start": 52.55,
+  "end": 52.77
+ },
+ {
+  "line": "vo6",
+  "text": "build",
+  "start": 52.77,
+  "end": 53.09
+ },
+ {
+  "line": "vo6",
+  "text": "fails,",
+  "start": 53.09,
+  "end": 53.41
+ },
+ {
+  "line": "vo6",
+  "text": "showing",
+  "start": 53.54,
+  "end": 54.06
+ },
+ {
+  "line": "vo6",
+  "text": "the",
+  "start": 54.06,
+  "end": 54.32
+ },
+ {
+  "line": "vo6",
+  "text": "exact",
+  "start": 54.32,
+  "end": 54.71
+ },
+ {
+  "line": "vo6",
+  "text": "rows.",
+  "start": 54.71,
+  "end": 55.04
+ },
+ {
+  "line": "vo7",
+  "text": "Start",
+  "start": 56.0,
+  "end": 56.29
+ },
+ {
+  "line": "vo7",
+  "text": "from",
+  "start": 56.29,
+  "end": 56.53
+ },
+ {
+  "line": "vo7",
+  "text": "the",
+  "start": 56.53,
+  "end": 56.73
+ },
+ {
+  "line": "vo7",
+  "text": "data.",
+  "start": 56.73,
+  "end": 56.97
+ },
+ {
+  "line": "vo7",
+  "text": "Verify",
+  "start": 57.51,
+  "end": 57.93
+ },
+ {
+  "line": "vo7",
+  "text": "the",
+  "start": 57.93,
+  "end": 58.17
+ },
+ {
+  "line": "vo7",
+  "text": "behaviour.",
+  "start": 58.18,
+  "end": 58.77
+ },
+ {
+  "line": "vo7",
+  "text": "Part",
+  "start": 59.24,
+  "end": 59.5
+ },
+ {
+  "line": "vo7",
+  "text": "two",
+  "start": 59.5,
+  "end": 59.71
+ },
+ {
+  "line": "vo7",
+  "text": "is",
+  "start": 59.71,
+  "end": 59.88
+ },
+ {
+  "line": "vo7",
+  "text": "in",
+  "start": 59.88,
+  "end": 60.04
+ },
+ {
+  "line": "vo7",
+  "text": "the",
+  "start": 60.04,
+  "end": 60.25
+ },
+ {
+  "line": "vo7",
+  "text": "repo.",
+  "start": 60.25,
+  "end": 60.51
+ }
+]

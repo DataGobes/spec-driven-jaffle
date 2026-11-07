@@ -7,7 +7,7 @@
       position: absolute; left: 60px; top: 560px; width: 960px; display: flex; gap: 18px; opacity: 0;
     }
     .wn-tile { flex: 1; border-radius: 12px; padding: 22px 26px; background: #f1eee8; border: 3px solid #a9a397; }
-    .wn-lbl { font: 600 24px var(--font-display); letter-spacing: .05em; color: #5f5a52; }
+    .wn-lbl { font: 600 28px var(--font-display); letter-spacing: .05em; color: #5f5a52; }
     .wn-val { margin-top: 8px; font: 700 52px/1.05 var(--font-display); color: var(--color-ink); letter-spacing: -0.01em; }
     #wn-t1 { border-color: var(--color-pass); }
     #wn-t1 .wn-val { color: #1d6b3c; }
@@ -32,7 +32,7 @@
     </div>
   </div>
   <script>
-    const C = { cmd: 0.4, pass: 1.4, warn: 2.0, done: 2.6, tiles: 3.6, green: 4.7, end: 6.55 };
+    const C = { cmd: 0.3, pass: 0.95, warn: 1.6, done: 2.2, tiles: 2.6, green: 5.5, end: 6.55 };
     const tl = gsap.timeline({ paused: true });
     tl.fromTo("#wn-term", { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0.05);
     tl.fromTo("#wn-cmd", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.7, ease: "none" }, C.cmd);
