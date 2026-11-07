@@ -1,0 +1,105 @@
+<!doctype html>
+<html
+  lang="en"
+  data-resolution="square"
+  data-composition-variables='[
+    {"id":"repo-url","type":"string","label":"Repo link","default":"github.com/DataGobes/spec-driven-jaffle"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      :root {
+        --color-ground: #dcd8cf;
+        --color-ink: #1a1c1f;
+        --color-spec: #e8a33d;
+        --color-contract: #5fa8c8;
+        --color-pass: #3fb46a;
+        --color-fail: #d9624b;
+        --win: #15181c;
+        --win-bar: #23272d;
+        --win-ink: #e6e3dc;
+        --win-muted: #8f97a2;
+        --win-key: #9db4c8;
+        --font-display: "Outfit", sans-serif;
+        --font-mono: "IBM Plex Mono", monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1080px; overflow: hidden; background: var(--color-ground); }
+      #root { width: 100%; height: 100%; font-family: var(--font-display); }
+      #ground { position: absolute; inset: 0; background: var(--color-ground); }
+
+      /* shared window kit for every scene */
+      .w {
+        position: absolute; left: 60px; width: 960px; background: var(--win);
+        border-radius: 14px; overflow: hidden; box-shadow: 0 18px 40px rgba(0,0,0,.22);
+      }
+      .wbar {
+        height: 56px; background: var(--win-bar); display: flex; align-items: center;
+        padding: 0 24px; gap: 10px; color: var(--win-muted); font: 500 26px var(--font-display);
+      }
+      .wdot { width: 13px; height: 13px; border-radius: 50%; background: #3a3f46; }
+      .wtab { margin-left: 14px; color: var(--win-ink); }
+      .wtag {
+        margin-left: auto; padding: 4px 12px; border-radius: 4px; border: 2px solid currentColor;
+        font: 600 20px var(--font-display); letter-spacing: .06em;
+      }
+      .code { padding: 18px 32px; font: 500 30px/44px var(--font-mono); color: var(--win-ink); }
+      .ln { position: relative; white-space: pre; height: 44px; }
+      .ln > span { position: relative; }
+      .k { color: var(--win-key); }
+      .m { color: var(--win-muted); }
+      .ok { color: var(--color-pass); }
+      .bad { color: var(--color-fail); }
+      .sp { color: var(--color-spec); }
+      .ct { color: var(--color-contract); }
+      .band {
+        position: absolute; left: -32px; right: -32px; top: 0; bottom: 0;
+        transform-origin: left center; transform: scaleX(0);
+      }
+      .band-spec { background: rgba(232,163,61,.2); border-left: 6px solid var(--color-spec); }
+      .band-ct { background: rgba(95,168,200,.2); border-left: 6px solid var(--color-contract); }
+      .band-ok { background: rgba(63,180,106,.16); border-left: 6px solid var(--color-pass); }
+      .band-bad { background: rgba(217,98,75,.22); border-left: 6px solid var(--color-fail); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="60.5" data-width="1080" data-height="1080">
+      <div id="ground"></div>
+      <div id="hook" data-composition-id="hook" data-composition-src="compositions/hook.html"
+        data-start="0" data-duration="7.4" data-track-index="1" data-track-kind="graphics"
+        data-width="1080" data-height="1080"></div>
+      <div id="draft" data-composition-id="draft" data-composition-src="compositions/draft.html"
+        data-start="7.4" data-duration="8.2" data-track-index="1" data-track-kind="graphics"
+        data-width="1080" data-height="1080"></div>
+      <div id="warn" data-composition-id="warn" data-composition-src="compositions/warn.html"
+        data-start="15.6" data-duration="6.8" data-track-index="1" data-track-kind="graphics"
+        data-width="1080" data-height="1080"></div>
+      <div id="decide" data-composition-id="decide" data-composition-src="compositions/decide.html"
+        data-start="22.4" data-duration="9.4" data-track-index="1" data-track-kind="graphics"
+        data-width="1080" data-height="1080"></div>
+      <div id="structure" data-composition-id="structure" data-composition-src="compositions/structure.html"
+        data-start="31.8" data-duration="10.3" data-track-index="1" data-track-kind="graphics"
+        data-width="1080" data-height="1080"></div>
+      <div id="behaviour" data-composition-id="behaviour" data-composition-src="compositions/behaviour.html"
+        data-start="42.1" data-duration="11.0" data-track-index="1" data-track-kind="graphics"
+        data-width="1080" data-height="1080"></div>
+      <div id="close" data-composition-id="close" data-composition-src="compositions/close.html"
+        data-start="53.1" data-duration="7.4" data-track-index="1" data-track-kind="graphics"
+        data-width="1080" data-height="1080"></div>
+      <div id="chapter" data-composition-id="chapter" data-composition-src="compositions/chapter.html"
+        data-start="7.4" data-duration="45.7" data-track-index="2" data-track-kind="graphics"
+        data-width="1080" data-height="1080"></div>
+      <div id="captions" data-composition-id="captions" data-composition-src="compositions/captions.html"
+        data-start="0" data-duration="60.5" data-track-index="3" data-track-kind="captions"
+        data-width="1080" data-height="1080"></div>
+      <!-- AUDIO -->
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,37 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; font-family: var(--font-display); color: var(--color-ink); }
+    .cl-line { position: absolute; left: 96px; width: 900px; font: 700 84px/1.08 var(--font-display); letter-spacing: -0.015em; }
+    #cl-1 { top: 280px; }
+    #cl-2 { top: 440px; }
+    .cl-line span { display: inline-block; margin-right: 0.22em; color: #b9b4aa; }
+    #cl-tag { position: absolute; left: 96px; top: 700px; font: 600 30px var(--font-display); color: #4a463f; opacity: 0; }
+    #cl-repo {
+      position: absolute; left: 96px; top: 800px; font: 500 30px var(--font-mono); color: var(--color-ink);
+      border-top: 4px solid var(--color-ink); padding-top: 18px; opacity: 0;
+    }
+  </style>
+  <div id="root" data-composition-id="close" data-width="1080" data-height="1080">
+    <div id="cl-stage" class="clip" data-start="0" data-duration="7.4">
+      <div class="cl-line" id="cl-1"><span>Start</span><span>from</span><span>the</span><span class="cl-acc">data.</span></div>
+      <div class="cl-line" id="cl-2"><span>Verify</span><span>the</span><span class="cl-acc">behaviour.</span></div>
+      <div id="cl-tag">Part 2 is in the repo</div>
+      <div id="cl-repo" data-var-text="repo-url">github.com/DataGobes/spec-driven-jaffle</div>
+    </div>
+  </div>
+  <script>
+    const C = { l1: [0.3, 0.6, 0.8, 0.95], l2: [1.7, 2.1, 2.3], tag: 3.4, repo: 3.9 };
+    const tl = gsap.timeline({ paused: true });
+    gsap.utils.toArray("#cl-1 span").forEach((el, i) => {
+      const to = el.classList.contains("cl-acc") ? "#8f5410" : "#1a1c1f";
+      tl.fromTo(el, { color: "#b9b4aa" }, { color: to, duration: 0.09, ease: "none" }, C.l1[i]);
+    });
+    gsap.utils.toArray("#cl-2 span").forEach((el, i) => {
+      const to = el.classList.contains("cl-acc") ? "#8f5410" : "#1a1c1f";
+      tl.fromTo(el, { color: "#b9b4aa" }, { color: to, duration: 0.09, ease: "none" }, C.l2[i]);
+    });
+    tl.fromTo("#cl-tag", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2 }, C.tag);
+    tl.fromTo("#cl-repo", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2 }, C.repo);
+    window.__timelines["close"] = tl;
+  </script>
+</template>

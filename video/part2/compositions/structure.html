@@ -1,0 +1,51 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; font-family: var(--font-display); color: var(--color-ink); }
+    #st-layers { position: absolute; left: 60px; top: 128px; width: 960px; display: flex; gap: 18px; }
+    .st-l { flex: 1; border-radius: 12px; padding: 20px 26px; border: 3px solid #a9a397; background: #f1eee8; opacity: 0; }
+    .st-lbl { font: 600 24px var(--font-display); letter-spacing: .05em; color: #5f5a52; }
+    .st-val { margin-top: 6px; font: 700 44px/1.1 var(--font-display); letter-spacing: -0.01em; }
+    .st-sub { margin-top: 6px; font: 500 24px var(--font-display); color: #4a463f; }
+    #st-beh { border-style: dashed; }
+    #st-sql { top: 370px; }
+    #st-tests { top: 806px; }
+    #st-rule { position: relative; }
+    #st-strike { position: absolute; left: -6px; right: -6px; top: 50%; height: 4px; background: var(--color-fail); transform-origin: left center; transform: scaleX(0); }
+  </style>
+  <div id="root" data-composition-id="structure" data-width="1080" data-height="1080">
+    <div id="st-stage" class="clip" data-start="0" data-duration="10.3">
+      <div id="st-layers">
+        <div class="st-l" id="st-str"><div class="st-lbl">LAYER 1</div><div class="st-val">Structure</div><div class="st-sub">contract · data tests</div></div>
+        <div class="st-l" id="st-beh"><div class="st-lbl">LAYER 2</div><div class="st-val">Behaviour</div><div class="st-sub">does the logic hold?</div></div>
+      </div>
+      <div class="w" id="st-sql">
+        <div class="wbar"><span class="wdot"></span><span class="wdot"></span><span class="wdot"></span><span class="wtab">fct_customer_monthly_revenue.sql</span></div>
+        <div class="code">
+          <div class="ln"><span><span class="k">select</span> order_id, customer_id, order_date</span></div>
+          <div class="ln"><span><span class="k">from</span> <span class="m">{{ ref('stg_orders') }}</span></span></div>
+          <div class="ln" id="st-c"><i class="band band-bad"></i><span class="sp" id="st-rule">-- rule: returned orders don't count<i id="st-strike"></i></span></div>
+          <div class="ln" id="st-w"><i class="band band-bad"></i><span id="st-rule2"><span class="k">where</span> status <span class="k">not in</span> ('returned', …)</span></div>
+        </div>
+      </div>
+      <div class="w" id="st-tests">
+        <div class="wbar"><span class="wdot"></span><span class="wdot"></span><span class="wdot"></span><span class="wtab">dbt build · structure checks only</span></div>
+        <div class="code"><div class="ln" id="st-pass"><span><span class="ok">PASS=7</span>  ERROR=0   <span class="m">looks fine</span></span></div></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const C = { str: 0.3, beh: 2.4, sql: 3.6, del: 5.2, tests: 6.9, pass: 7.6, end: 10.05 };
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#st-str", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "expo.out" }, C.str);
+    tl.fromTo("#st-beh", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "expo.out" }, C.beh);
+    tl.fromTo("#st-sql", { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, C.sql);
+    tl.fromTo("#st-c .band, #st-w .band", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, C.del);
+    tl.fromTo("#st-strike", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, C.del + 0.2);
+    tl.fromTo("#st-rule2", { opacity: 1 }, { opacity: 0.25, duration: 0.3, ease: "power2.out" }, C.del + 0.35);
+    tl.fromTo("#st-tests", { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, C.tests);
+    tl.fromTo("#st-pass", { opacity: 0 }, { opacity: 1, duration: 0.15 }, C.pass);
+    tl.fromTo("#st-layers, #st-sql, #st-tests", { opacity: 1, filter: "blur(0px)" },
+      { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in", immediateRender: false }, C.end);
+    window.__timelines["structure"] = tl;
+  </script>
+</template>

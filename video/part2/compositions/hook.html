@@ -1,0 +1,58 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; font-family: var(--font-display); }
+    #h-part {
+      position: absolute; left: 60px; top: 52px; padding: 8px 16px; border-radius: 4px;
+      background: var(--color-ink); color: var(--color-ground); font: 600 26px var(--font-display); letter-spacing: .02em;
+    }
+    #h-spec { top: 128px; }
+    #h-rows { top: 330px; }
+    .h-row { display: flex; position: relative; height: 56px; align-items: center; padding: 0 32px; font: 500 30px var(--font-mono); color: var(--win-ink); }
+    .h-row > span { position: relative; }
+    .h-head { color: var(--win-muted); font: 600 24px var(--font-display); letter-spacing: .04em; height: 52px; }
+    .h-c1 { width: 200px; } .h-c2 { width: 260px; } .h-c3 { width: 270px; } .h-c4 { flex: 1; text-align: right; }
+    .h-row .band { left: 0; right: 0; }
+    #h-q { position: absolute; left: 60px; top: 760px; width: 960px; font: 700 76px/1.1 var(--font-display); letter-spacing: -0.015em; color: var(--color-ink); }
+    #h-q span { display: inline-block; opacity: 0; margin-right: 0.22em; }
+    #h-q .h-acc { color: #a8402b; }
+    #h-x { position: absolute; right: 32px; top: 0; height: 44px; display: flex; align-items: center; opacity: 0; font: 700 30px var(--font-display); }
+  </style>
+  <div id="root" data-composition-id="hook" data-width="1080" data-height="1080">
+    <div id="h-stage" class="clip" data-start="0" data-duration="7.4">
+      <div id="h-part">PART 2</div>
+      <div class="w" id="h-spec">
+        <div class="wbar"><span class="wdot"></span><span class="wdot"></span><span class="wdot"></span><span class="wtab">specs/fct_orders.yml</span></div>
+        <div class="code">
+          <div class="ln" id="h-chk"><i class="band band-spec"></i><span>  - name: amount   <span class="k">checks:</span> [amount &gt; 0]</span><span id="h-x" class="bad">✗</span></div>
+        </div>
+      </div>
+      <div class="w" id="h-rows">
+        <div class="wbar"><span class="wdot"></span><span class="wdot"></span><span class="wdot"></span><span class="wtab">fct_orders · real rows</span></div>
+        <div class="h-row h-head"><span class="h-c1">ORDER</span><span class="h-c2">DATE</span><span class="h-c3">STATUS</span><span class="h-c4">AMOUNT</span></div>
+        <div class="h-row"><span class="h-c1">63</span><span class="h-c2">2018-03-06</span><span class="h-c3">completed</span><span class="h-c4">29.00</span></div>
+        <div class="h-row"><span class="h-c1">64</span><span class="h-c2">2018-03-07</span><span class="h-c3">completed</span><span class="h-c4">26.00</span></div>
+        <div class="h-row" id="h-65"><i class="band band-bad"></i><span class="h-c1">65</span><span class="h-c2">2018-03-08</span><span class="h-c3">completed</span><span class="h-c4" id="h-amt">0.00</span></div>
+        <div class="h-row"><span class="h-c1">66</span><span class="h-c2">2018-03-10</span><span class="h-c3">completed</span><span class="h-c4">28.00</span></div>
+        <div class="h-row"><span class="h-c1">67</span><span class="h-c2">2018-03-11</span><span class="h-c3">completed</span><span class="h-c4">23.00</span></div>
+      </div>
+      <div id="h-q"><span id="h-q1">Order</span><span id="h-q2" class="h-acc">65</span><span id="h-q3">disagreed.</span></div>
+    </div>
+  </div>
+  <script>
+    // cue times (s, scene-relative): retimed from the measured voice
+    const C = { spec: 0.4, rule: 1.6, q: [2.9, 3.2, 3.45], row: 3.4, done: 4.6, amt: 5.6, end: 7.15 };
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#h-spec", { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0.05);
+    tl.fromTo("#h-rows", { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0.25);
+    C.q.forEach((t, i) => tl.fromTo("#h-q" + (i + 1), { opacity: 0, filter: "blur(6px)" },
+      { opacity: 1, filter: "blur(0px)", duration: 0.14, ease: "power2.out" }, t));
+    tl.fromTo("#h-chk .band", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, C.rule);
+    tl.fromTo("#h-65 .band", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, C.row);
+    tl.fromTo("#h-amt", { color: "#e6e3dc" }, { color: "#ff8a73", duration: 0.2 }, C.amt);
+    tl.fromTo("#h-amt", { scale: 1 }, { scale: 1.18, duration: 0.25, ease: "back.out(2)", transformOrigin: "right center" }, C.amt);
+    tl.fromTo("#h-x", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.6)" }, C.amt + 0.15);
+    tl.fromTo("#h-spec, #h-rows, #h-part, #h-q", { opacity: 1, filter: "blur(0px)" },
+      { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in", immediateRender: false }, C.end);
+    window.__timelines["hook"] = tl;
+  </script>
+</template>

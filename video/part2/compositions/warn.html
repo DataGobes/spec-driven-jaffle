@@ -1,0 +1,50 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; font-family: var(--font-display); }
+    #wn-term { top: 128px; }
+    #wn-cmd { display: inline-block; vertical-align: top; }
+    #wn-badge {
+      position: absolute; left: 60px; top: 560px; width: 960px; display: flex; gap: 18px; opacity: 0;
+    }
+    .wn-tile { flex: 1; border-radius: 12px; padding: 22px 26px; background: #f1eee8; border: 3px solid #a9a397; }
+    .wn-lbl { font: 600 24px var(--font-display); letter-spacing: .05em; color: #5f5a52; }
+    .wn-val { margin-top: 8px; font: 700 52px/1.05 var(--font-display); color: var(--color-ink); letter-spacing: -0.01em; }
+    #wn-t1 { border-color: var(--color-pass); }
+    #wn-t1 .wn-val { color: #1d6b3c; }
+    #wn-t2 { border-color: var(--color-spec); }
+    #wn-t2 .wn-val { color: #8f5410; }
+  </style>
+  <div id="root" data-composition-id="warn" data-width="1080" data-height="1080">
+    <div id="wn-stage" class="clip" data-start="0" data-duration="6.8">
+      <div class="w" id="wn-term">
+        <div class="wbar"><span class="wdot"></span><span class="wdot"></span><span class="wdot"></span><span class="wtab">terminal</span></div>
+        <div class="code">
+          <div class="ln"><span class="m">$ </span><span id="wn-cmd">dbt build --select fct_orders</span></div>
+          <div class="ln" id="wn-o1"><span class="ok">PASS</span> not_null · unique · relationships</div>
+          <div class="ln" id="wn-o2"><i class="band band-spec"></i><span><span class="sp">WARN 1</span> amount &gt; 0</span></div>
+          <div class="ln" id="wn-o3"><span>Done. <span class="ok">PASS=7</span> <span class="sp">WARN=1</span> <span class="ok">ERROR=0</span></span></div>
+        </div>
+      </div>
+      <div id="wn-badge">
+        <div class="wn-tile" id="wn-t1"><div class="wn-lbl">BUILD</div><div class="wn-val">stays green</div></div>
+        <div class="wn-tile" id="wn-t2"><div class="wn-lbl">DRAFT SPEC</div><div class="wn-val">only warns</div></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const C = { cmd: 0.4, pass: 1.4, warn: 2.0, done: 2.6, tiles: 3.6, green: 4.7, end: 6.55 };
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#wn-term", { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0.05);
+    tl.fromTo("#wn-cmd", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.7, ease: "none" }, C.cmd);
+    tl.fromTo("#wn-o1", { opacity: 0 }, { opacity: 1, duration: 0.15 }, C.pass);
+    tl.fromTo("#wn-o2", { opacity: 0 }, { opacity: 1, duration: 0.15 }, C.warn);
+    tl.fromTo("#wn-o2 .band", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, C.warn + 0.1);
+    tl.fromTo("#wn-o3", { opacity: 0 }, { opacity: 1, duration: 0.15 }, C.done);
+    tl.fromTo("#wn-badge", { opacity: 0 }, { opacity: 1, duration: 0.01 }, C.tiles);
+    tl.fromTo("#wn-t2", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "expo.out" }, C.tiles);
+    tl.fromTo("#wn-t1", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "expo.out" }, C.green);
+    tl.fromTo("#wn-term, #wn-badge", { opacity: 1, filter: "blur(0px)" },
+      { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in", immediateRender: false }, C.end);
+    window.__timelines["warn"] = tl;
+  </script>
+</template>

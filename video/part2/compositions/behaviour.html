@@ -1,0 +1,52 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; font-family: var(--font-display); }
+    #bh-ex { top: 128px; }
+    #bh-ex .wtag { color: var(--color-spec); }
+    #bh-term { top: 600px; }
+    #bh-term .code { font-size: 28px; }
+    .bh-diff { display: flex; gap: 24px; padding: 4px 32px 22px; }
+    .bh-cell { flex: 1; border-radius: 8px; background: #1d2126; padding: 12px 18px; opacity: 0; }
+    .bh-k { font: 600 22px var(--font-display); color: var(--win-muted); letter-spacing: .04em; }
+    .bh-v { margin-top: 4px; font: 600 40px var(--font-mono); color: var(--win-ink); white-space: pre; }
+  </style>
+  <div id="root" data-composition-id="behaviour" data-width="1080" data-height="1080">
+    <div id="bh-stage" class="clip" data-start="0" data-duration="11.0">
+      <div class="w" id="bh-ex">
+        <div class="wbar"><span class="wdot"></span><span class="wdot"></span><span class="wdot"></span><span class="wtab">spec · rule 1 example</span><span class="wtag">UNIT TEST</span></div>
+        <div class="code">
+          <div class="ln"><span><span class="k">rule:</span> returned orders don't count</span></div>
+          <div class="ln" id="bh-g"><i class="band band-spec"></i><span><span class="k">given:</span> order 1 completed  $10</span></div>
+          <div class="ln" id="bh-g2"><i class="band band-spec"></i><span>       order 2 returned   $99</span></div>
+          <div class="ln" id="bh-g3"><i class="band band-spec"></i><span>       order 3 pending    $50</span></div>
+          <div class="ln" id="bh-e"><i class="band band-ok"></i><span><span class="k">expect:</span> 1 order · revenue <span class="ok">10.00</span></span></div>
+        </div>
+      </div>
+      <div class="w" id="bh-term">
+        <div class="wbar"><span class="wdot"></span><span class="wdot"></span><span class="wdot"></span><span class="wtab">dbt build · with rule examples</span></div>
+        <div class="code">
+          <div class="ln" id="bh-fail"><i class="band band-bad"></i><span><span class="bad">FAIL</span> returned_orders_do_not_count</span></div>
+        </div>
+        <div class="bh-diff">
+          <div class="bh-cell" id="bh-d1"><div class="bh-k">ORDER_COUNT</div><div class="bh-v"><span class="ok">1</span> → <span class="bad">3</span></div></div>
+          <div class="bh-cell" id="bh-d2"><div class="bh-k">REVENUE</div><div class="bh-v"><span class="ok">10.00</span> → <span class="bad">159.00</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const C = { ex: 0.1, given: 2.6, expect: 3.6, term: 5.4, fail: 6.4, diff: 7.3, end: 10.75 };
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#bh-ex", { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, C.ex);
+    ["#bh-g", "#bh-g2", "#bh-g3"].forEach((s, i) =>
+      tl.fromTo(s + " .band", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, C.given + i * 0.08));
+    tl.fromTo("#bh-e .band", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, C.expect);
+    tl.fromTo("#bh-term", { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, C.term);
+    tl.fromTo("#bh-fail .band", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, C.fail);
+    tl.fromTo("#bh-d1", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.6)" }, C.diff);
+    tl.fromTo("#bh-d2", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.6)" }, C.diff + 0.15);
+    tl.fromTo("#bh-ex, #bh-term", { opacity: 1, filter: "blur(0px)" },
+      { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in", immediateRender: false }, C.end);
+    window.__timelines["behaviour"] = tl;
+  </script>
+</template>

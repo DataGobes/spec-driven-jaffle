@@ -1,0 +1,47 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; font-family: var(--font-display); }
+    #d-term { top: 128px; }
+    #d-spec { top: 410px; }
+    #d-cmd { display: inline-block; vertical-align: top; }
+    #d-spec .wtag { color: var(--color-contract); }
+  </style>
+  <div id="root" data-composition-id="draft" data-width="1080" data-height="1080">
+    <div id="d-stage" class="clip" data-start="0" data-duration="8.2">
+      <div class="w" id="d-term">
+        <div class="wbar"><span class="wdot"></span><span class="wdot"></span><span class="wdot"></span><span class="wtab">terminal</span></div>
+        <div class="code">
+          <div class="ln"><span class="m">$ </span><span id="d-cmd">specgen draft stg_orders --as fct_orders</span></div>
+          <div class="ln" id="d-o1"><span class="ok">→</span> specs/fct_orders.yml  <span class="sp">draft</span></div>
+          <div class="ln" id="d-o2"><span class="m">  profiled on 99 real rows</span></div>
+        </div>
+      </div>
+      <div class="w" id="d-spec">
+        <div class="wbar"><span class="wdot"></span><span class="wdot"></span><span class="wdot"></span><span class="wtab">fct_orders.yml</span><span class="wtag">DRAFTED FROM DATA</span></div>
+        <div class="code">
+          <div class="ln"><span class="k">status:</span> <span class="sp">draft</span></div>
+          <div class="ln" id="d-cols"><i class="band band-ct"></i><span><span class="k">columns:</span> order_id, customer_id, …</span></div>
+          <div class="ln" id="d-types"><i class="band band-ct"></i><span>  integer · date · varchar</span></div>
+          <div class="ln" id="d-grain"><i class="band band-ct"></i><span><span class="k">grain:</span> [order_id]  <span class="m"># unique, no nulls</span></span></div>
+          <div class="ln" id="d-acc"><i class="band band-ct"></i><span><span class="k">accepted_values:</span> [completed,</span></div>
+          <div class="ln" id="d-acc2"><i class="band band-ct"></i><span>  placed, returned, shipped, …]</span></div>
+          <div class="ln"><span class="k">description:</span> <span class="sp">TODO</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const C = { cmd: 0.5, out: 2.4, cols: 4.5, types: 5.1, grain: 5.6, acc: 6.3, end: 7.95 };
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#d-term", { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0.05);
+    tl.fromTo("#d-cmd", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1.0, ease: "none" }, C.cmd);
+    tl.fromTo("#d-o1", { opacity: 0 }, { opacity: 1, duration: 0.15 }, C.out);
+    tl.fromTo("#d-o2", { opacity: 0 }, { opacity: 1, duration: 0.15 }, C.out + 0.25);
+    tl.fromTo("#d-spec", { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, C.out + 0.3);
+    const band = (s, t) => tl.fromTo(s + " .band", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, t);
+    band("#d-cols", C.cols); band("#d-types", C.types); band("#d-grain", C.grain); band("#d-acc", C.acc); band("#d-acc2", C.acc + 0.06);
+    tl.fromTo("#d-term, #d-spec", { opacity: 1, filter: "blur(0px)" },
+      { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in", immediateRender: false }, C.end);
+    window.__timelines["draft"] = tl;
+  </script>
+</template>

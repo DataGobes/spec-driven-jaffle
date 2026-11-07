@@ -7,7 +7,7 @@ dbt_packages/
 __pycache__/
 .user.yml
 node_modules/
-video/hyperframes/.hyperframes/
-video/hyperframes/renders/
+video/*/.hyperframes/
+video/*/renders/
 *.mp4
 task.md
